@@ -35,19 +35,25 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * DemandObject
  */
 public class DemandObject implements DataObject
 {
+    private static final String PREFIX = "elasticdata-gru.demand.type_label.";
+    private static final String DEFAULT_DEMAND_TYPE = "Not defined";
 
-    private long _lTimestamp;
+    private final long _lTimestamp;
     private String _strDemandType;
+    private String _strDemandTypeId;
+    
 
     public DemandObject( Demand demand )
     {
-        _strDemandType = demand.getTypeId();
+        _strDemandTypeId = demand.getTypeId();
+        _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId , DEFAULT_DEMAND_TYPE );
         _lTimestamp = demand.getCreationDate();
 
     }
@@ -59,6 +65,17 @@ public class DemandObject implements DataObject
     }
 
     /**
+     * Returns the DemandType Id
+     *
+     * @return The DemandType Id
+     */
+    public String getDemandTypeId()
+    {
+        return _strDemandTypeId;
+    }
+
+    
+    /**
      * Returns the DemandType
      *
      * @return The DemandType
@@ -68,14 +85,5 @@ public class DemandObject implements DataObject
         return _strDemandType;
     }
 
-    /**
-     * Sets the DemandType
-     *
-     * @param strDemandType The DemandType
-     */
-    public void setDemandType( String strDemandType )
-    {
-        _strDemandType = strDemandType;
-    }
-
+   
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Module elasticdata gru</title>
+    </properties>
+    <body>
+        <section name="Module elasticdata gru">
+            <!--
+            <p>
+                <img src="images/elasticdata.png" />
+            </p>
+            -->
+            <subsection name="Introduction">
+                <p>Module de production de données de la GRU pour ElasticSearch / Kibana</p>
+            </subsection>
+            <subsection name="Configuration">
+                <p>Configurer les labels des types de demande dans le fichier <b>elasticdata-gru.properties</b></p>
+            </subsection>
+        </section>
+    </body>
+</document>
+
