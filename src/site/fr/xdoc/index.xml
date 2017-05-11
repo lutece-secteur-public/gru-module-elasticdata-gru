@@ -5,11 +5,9 @@
     </properties>
     <body>
         <section name="Module elasticdata gru">
-            <!--
             <p>
-                <img src="images/elasticdata.png" />
+                <img src="images/elastic.png" />
             </p>
-            -->
             <subsection name="Introduction">
                 <p>Module de production de données de la GRU pour ElasticSearch / Kibana</p>
             </subsection>
