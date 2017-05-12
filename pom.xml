@@ -40,12 +40,6 @@
             <version>[0.9.0,)</version>
             <type>lutece-plugin</type>
         </dependency>
-        <dependency>
-            <groupId>fr.paris.lutece.plugins</groupId>
-            <artifactId>plugin-grustoragedb</artifactId>
-            <version>[1.0.1-SNAPSHOT,)</version>
-            <type>lutece-plugin</type>
-        </dependency>
     </dependencies>
 
     <properties>

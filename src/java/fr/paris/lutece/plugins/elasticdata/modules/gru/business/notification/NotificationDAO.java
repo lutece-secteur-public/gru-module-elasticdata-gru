@@ -31,59 +31,44 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.elasticdata.modules.gru;
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.sql.DAOUtil;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * DemandObject
+ * NotificationDAO
  */
-public class DemandObject implements DataObject
+public class NotificationDAO
 {
-    private static final String PREFIX = "elasticdata-gru.demand.type_label.";
-    private static final String DEFAULT_DEMAND_TYPE = "Not defined";
 
-    private final long _lTimestamp;
-    private String _strDemandType;
-    private String _strDemandTypeId;
-    
-
-    public DemandObject( Demand demand )
-    {
-        _strDemandTypeId = demand.getTypeId();
-        _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId , DEFAULT_DEMAND_TYPE );
-        _lTimestamp = demand.getCreationDate();
-
-    }
-
-    @Override
-    public String getTimestamp()
-    {
-        return String.valueOf( _lTimestamp );
-    }
+    private static final String SQL_QUERY_SELECTALL = "SELECT demand_type_id , date FROM grustoragedb_notification";
 
     /**
-     * Returns the DemandType Id
+     * Load the data of all the objects and returns them as a list
      *
-     * @return The DemandType Id
+     * @return The list which contains the data of all the objects
      */
-    public String getDemandTypeId()
+    public Collection<DataObject> getNotificationList()
     {
-        return _strDemandTypeId;
+        Collection<DataObject> listNotifications = new ArrayList<>();
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL );
+        daoUtil.executeQuery();
+
+        while( daoUtil.next() )
+        {
+            NotificationObject notification = new NotificationObject();
+
+            notification.setDemandTypeId(daoUtil.getString( 1 ) );
+            notification.setTimestamp(daoUtil.getLong( 2 ) );
+
+            listNotifications.add( notification );
+        }
+
+        daoUtil.free();
+        return listNotifications;
     }
 
-    
-    /**
-     * Returns the DemandType
-     *
-     * @return The DemandType
-     */
-    public String getDemandType()
-    {
-        return _strDemandType;
-    }
-
-   
 }

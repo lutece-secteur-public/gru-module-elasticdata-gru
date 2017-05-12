@@ -33,16 +33,12 @@
  */
 
 
-package fr.paris.lutece.plugins.elasticdata.modules.gru;
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
-import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
-import fr.paris.lutece.plugins.grustoragedb.business.DemandDAO;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * DemandDataSource
@@ -55,15 +51,8 @@ public class DemandDataSource extends AbstractDataSource implements DataSource
     @Override
     public Collection<DataObject> getDataObjects()
     {
-        List<DataObject> list = new ArrayList<>();
         DemandDAO _dao = new DemandDAO();
-        Collection<Demand> listDemands = _dao.loadAllDemands();
-        for( Demand demand : listDemands )
-        {
-            DemandObject sd = new DemandObject( demand );
-            list.add( sd );
-        }
-        return list;
+        return _dao.getDemandList();
     }
 
 }
