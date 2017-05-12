@@ -36,7 +36,6 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationObject;
 import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +45,7 @@ import java.util.Collection;
  */
 public class DemandDAO 
 {
-    private static final String SQL_QUERY_SELECTALL = "SELECT demand_type_id , date FROM grustoragedb_notification";
+    private static final String SQL_QUERY_SELECTALL = "SELECT type_id , creation_date FROM grustoragedb_demand";
 
     /**
      * Load the data of all the objects and returns them as a list
