@@ -33,45 +33,26 @@
  */
 
 
-package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business.email;
 
+import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.util.sql.DAOUtil;
-import java.util.ArrayList;
+import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import java.util.Collection;
 
 /**
- * DemandDAO
+ * DemandDataSource
  */
-public class DemandDAO 
+public class EmailDataSource extends AbstractDataSource implements DataSource
 {
-    private static final String SQL_QUERY_SELECTALL = "SELECT type_id , creation_date FROM grustoragedb_demand";
-
     /**
-     * Load the data of all the objects and returns them as a list
-     *
-     * @return The list which contains the data of all the objects
+     * {@inheritDoc }
      */
-    public Collection<DataObject> getDemandList()
+    @Override
+    public Collection<DataObject> getDataObjects()
     {
-        Collection<DataObject> listDemands = new ArrayList<>();
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL );
-        daoUtil.executeQuery();
-
-        while( daoUtil.next() )
-        {
-            BaseDemandObject demand = new BaseDemandObject();
-
-            demand.setDemandTypeId(daoUtil.getString( 1 ) );
-            demand.setTimestamp(daoUtil.getLong( 2 ) );
-
-            listDemands.add( demand );
-        }
-
-        daoUtil.free();
-        return listDemands;
+        EmailDAO _dao = new EmailDAO();
+        return _dao.getEmailList();
     }
-
 
 }

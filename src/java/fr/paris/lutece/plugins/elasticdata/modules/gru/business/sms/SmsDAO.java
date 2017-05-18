@@ -31,68 +31,49 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
+
+
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.util.sql.DAOUtil;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * DemandObject
+ * DemandDAO
  */
-public class DemandObject implements DataObject
+public class SmsDAO 
 {
-    private static final String PREFIX = "elasticdata-gru.demand.type_label.";
-    private static final String DEFAULT_DEMAND_TYPE = "Not defined";
-
-    private long _lTimestamp;
-    private String _strDemandType;
-    private String _strDemandTypeId;
-    
-    @Override
-    public String getTimestamp()
-    {
-        return String.valueOf( _lTimestamp );
-    }
-    
-    /**
-     * Set the notification timestamp
-     * @param lTimestamp the notification timestamp
-     */
-    public void setTimestamp( long lTimestamp )
-    {
-        _lTimestamp = lTimestamp;
-    }
-    
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.demand_type_id , a.date "
+            + " FROM grustoragedb_notification a , grustoragedb_notification_sms b "
+            + " WHERE a.id = b.notification_id ";
 
     /**
-     * Returns the DemandType Id
+     * Load the data of all the objects and returns them as a list
      *
-     * @return The DemandType Id
+     * @return The list which contains the data of all the objects
      */
-    public String getDemandTypeId()
+    public Collection<DataObject> getSmsList()
     {
-        return _strDemandTypeId;
-    }
-    
-    /**
-     * Set the demand type id
-     * @param strDemandTypeId the demand type id
-     */
-    public void setDemandTypeId( String strDemandTypeId )
-    {
-        _strDemandTypeId = strDemandTypeId;
-        _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId , DEFAULT_DEMAND_TYPE );
-    }
-    
-    /**
-     * Returns the DemandType
-     *
-     * @return The DemandType
-     */
-    public String getDemandType()
-    {
-        return _strDemandType;
+        Collection<DataObject> listDemands = new ArrayList<>();
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL );
+        daoUtil.executeQuery();
+
+        while( daoUtil.next() )
+        {
+            BaseDemandObject demand = new BaseDemandObject();
+
+            demand.setDemandTypeId(daoUtil.getString( 1 ) );
+            demand.setTimestamp(daoUtil.getLong( 2 ) );
+
+            listDemands.add( demand );
+        }
+
+        daoUtil.free();
+        return listDemands;
     }
 
-   
+
 }

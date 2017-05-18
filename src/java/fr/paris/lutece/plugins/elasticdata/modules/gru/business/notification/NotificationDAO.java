@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,7 +60,7 @@ public class NotificationDAO
 
         while( daoUtil.next() )
         {
-            NotificationObject notification = new NotificationObject();
+            BaseDemandObject notification = new BaseDemandObject();
 
             notification.setDemandTypeId(daoUtil.getString( 1 ) );
             notification.setTimestamp(daoUtil.getLong( 2 ) );

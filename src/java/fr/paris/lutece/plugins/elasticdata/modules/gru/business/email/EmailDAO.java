@@ -33,7 +33,7 @@
  */
 
 
-package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business.email;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
@@ -44,33 +44,35 @@ import java.util.Collection;
 /**
  * DemandDAO
  */
-public class DemandDAO 
+public class EmailDAO 
 {
-    private static final String SQL_QUERY_SELECTALL = "SELECT type_id , creation_date FROM grustoragedb_demand";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.demand_type_id , a.date "
+            + " FROM grustoragedb_notification a , grustoragedb_notification_customer_email b "
+            + " WHERE a.id = b.notification_id ";
 
     /**
      * Load the data of all the objects and returns them as a list
      *
      * @return The list which contains the data of all the objects
      */
-    public Collection<DataObject> getDemandList()
+    public Collection<DataObject> getEmailList()
     {
-        Collection<DataObject> listDemands = new ArrayList<>();
+        Collection<DataObject> listEmails = new ArrayList<>();
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL );
         daoUtil.executeQuery();
 
         while( daoUtil.next() )
         {
-            BaseDemandObject demand = new BaseDemandObject();
+            BaseDemandObject email = new BaseDemandObject();
 
-            demand.setDemandTypeId(daoUtil.getString( 1 ) );
-            demand.setTimestamp(daoUtil.getLong( 2 ) );
+            email.setDemandTypeId(daoUtil.getString( 1 ) );
+            email.setTimestamp(daoUtil.getLong( 2 ) );
 
-            listDemands.add( demand );
+            listEmails.add( email );
         }
 
         daoUtil.free();
-        return listDemands;
+        return listEmails;
     }
 
 

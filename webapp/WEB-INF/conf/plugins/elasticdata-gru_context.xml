@@ -18,4 +18,18 @@
            <property name="dataType" value="notification" />
        </bean>
        
+       <bean id="elasticdata-gru.emailDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.email.EmailDataSource" >
+           <property name="id" value="EmailDataSource" />
+           <property name="name" value="Email Data Source" />
+           <property name="targetIndexName" value="emails" />
+           <property name="dataType" value="email" />
+       </bean>
+
+       <bean id="elasticdata-gru.smsDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms.SmsDataSource" >
+           <property name="id" value="SMSDataSource" />
+           <property name="name" value="SMS Data Source" />
+           <property name="targetIndexName" value="sms" />
+           <property name="dataType" value="sms" />
+       </bean>
+
 </beans>

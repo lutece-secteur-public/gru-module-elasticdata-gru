@@ -1,3 +1,8 @@
+package fr.paris.lutece.plugins.elasticdata.modules.gru.business;
+
+import fr.paris.lutece.plugins.elasticdata.business.DataObject;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 /*
  * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
@@ -33,15 +38,10 @@
  */
 
 
-package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
-
-import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
 /**
- * NotificationObject
+ * BaseDemandObject
  */
-public class NotificationObject implements DataObject
+public class BaseDemandObject implements DataObject
 {
     private static final String PREFIX = "elasticdata-gru.demand.type_label.";
     private static final String DEFAULT_DEMAND_TYPE = "Not defined";
@@ -55,7 +55,7 @@ public class NotificationObject implements DataObject
     {
         return String.valueOf( _lTimestamp );
     }
-
+    
     /**
      * Set the notification timestamp
      * @param lTimestamp the notification timestamp
@@ -65,6 +65,7 @@ public class NotificationObject implements DataObject
         _lTimestamp = lTimestamp;
     }
     
+
     /**
      * Returns the DemandType Id
      *
@@ -74,7 +75,7 @@ public class NotificationObject implements DataObject
     {
         return _strDemandTypeId;
     }
-
+    
     /**
      * Set the demand type id
      * @param strDemandTypeId the demand type id
@@ -94,5 +95,6 @@ public class NotificationObject implements DataObject
     {
         return _strDemandType;
     }
-   
+  
 }
+
