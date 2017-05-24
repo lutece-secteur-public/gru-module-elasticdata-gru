@@ -32,27 +32,92 @@
  * License 1.0
  */
 
-
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
+import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
+import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
+import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
+import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * NotificationDataSource
  */
-public class NotificationDataSource extends AbstractDataSource implements DataSource
+public class NotificationDataSource extends AbstractDataSource implements DataSource, INotificationListener
 {
+    INotificationDAO _notificationDAO;
+
+    /**
+     * Set the INotificationDAO to use
+     * 
+     * @param notificationDAO
+     */
+    public void setNotificationDAO( INotificationDAO notificationDAO )
+    {
+        _notificationDAO = notificationDAO;
+    }
+
     /**
      * {@inheritDoc }
      */
     @Override
-    public Collection<DataObject> getDataObjects()
+    public Collection<DataObject> getDataObjects( )
     {
-        NotificationDAO _dao = new NotificationDAO();
-        return  _dao.getNotificationList();
+        Collection<DataObject> collResult = new ArrayList<DataObject>( );
+        NotificationFilter filter = new NotificationFilter( );
+        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
+        {
+            collResult.add( new BaseDemandObject( notifDAO ) );
+        }
+        return collResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onCreateNotification( Notification notification )
+    {
+        if ( notification == null )
+        {
+            return;
+        }
+        BaseDemandObject notificationObj = new BaseDemandObject( notification );
+        try
+        {
+            DataSourceService.insertData( this, notificationObj );
+        }
+        catch( ElasticClientException e )
+        {
+            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for notification [" + notification.getId( ) + "]", e );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onUpdateNotification( Notification notification )
+    {
+        AppLogService.info( "NotificationDataSource doesn't manage onUpdateNotification method" );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDeleteDemand( String strDemandId, String strDemandTypeId )
+    {
+        AppLogService.info( "NotificationDataSource doesn't manage onDeleteDemand method" );
     }
 
 }

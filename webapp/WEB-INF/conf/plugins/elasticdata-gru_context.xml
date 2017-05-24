@@ -4,11 +4,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
 
+       <!-- Mock DAO -->
+       <bean id="elasticdata-gru.mockDemandDAO" class="fr.paris.lutece.plugins.grubusiness.business.demand.MockDemandDAO" />
+       <bean id="elasticdata-gru.mockNotificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.notification.MockNotificationDAO" />
+        
        <bean id="elasticdata-gru.demandDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource" >
            <property name="id" value="DemandDataSource" />
            <property name="name" value="Demand Data Source" />
            <property name="targetIndexName" value="demands" />
            <property name="dataType" value="demand" />
+           <property name="demandDAO" ref="elasticdata-gru.mockDemandDAO" />
        </bean>
 
        <bean id="elasticdata-gru.notificationDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource" >
@@ -16,6 +21,7 @@
            <property name="name" value="Notification Data Source" />
            <property name="targetIndexName" value="notifications" />
            <property name="dataType" value="notification" />
+           <property name="notificationDAO" ref="elasticdata-gru.mockNotificationDAO" />
        </bean>
        
        <bean id="elasticdata-gru.emailDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.email.EmailDataSource" >
@@ -23,6 +29,7 @@
            <property name="name" value="Email Data Source" />
            <property name="targetIndexName" value="emails" />
            <property name="dataType" value="email" />
+           <property name="notificationDAO" ref="elasticdata-gru.mockNotificationDAO" />
        </bean>
 
        <bean id="elasticdata-gru.smsDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms.SmsDataSource" >
@@ -30,6 +37,7 @@
            <property name="name" value="SMS Data Source" />
            <property name="targetIndexName" value="sms" />
            <property name="dataType" value="sms" />
+           <property name="notificationDAO" ref="elasticdata-gru.mockNotificationDAO" />
        </bean>
 
 </beans>

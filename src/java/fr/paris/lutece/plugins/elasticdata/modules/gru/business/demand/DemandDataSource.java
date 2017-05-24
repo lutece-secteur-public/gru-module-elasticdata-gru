@@ -32,27 +32,86 @@
  * License 1.0
  */
 
-
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
+import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandDAO;
+import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandListener;
+import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * DemandDataSource
  */
-public class DemandDataSource extends AbstractDataSource implements DataSource
+public class DemandDataSource extends AbstractDataSource implements DataSource, IDemandListener
 {
+    IDemandDAO _demandDAO;
+
+    /**
+     * Set the IDemandDAO to use
+     * 
+     * @param demandDAO
+     */
+    public void setDemandDAO( IDemandDAO demandDAO )
+    {
+        _demandDAO = demandDAO;
+    }
+
     /**
      * {@inheritDoc }
      */
     @Override
-    public Collection<DataObject> getDataObjects()
+    public Collection<DataObject> getDataObjects( )
     {
-        DemandDAO _dao = new DemandDAO();
-        return _dao.getDemandList();
+        Collection<DataObject> collResult = new ArrayList<DataObject>( );
+        for ( Demand demandDAO : _demandDAO.loadAllDemands( ) )
+        {
+            collResult.add( new BaseDemandObject( demandDAO ) );
+        }
+        return collResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onCreateDemand( Demand demand )
+    {
+        BaseDemandObject demandObj = new BaseDemandObject( demand );
+        try
+        {
+            DataSourceService.insertData( this, demandObj );
+        }
+        catch( ElasticClientException e )
+        {
+            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for demand [" + demand.getId( ) + "]", e );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onUpdateDemand( Demand demand )
+    {
+        AppLogService.info( "DemandDataSource doesn't manage onUpdateDemand method" );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDeleteDemand( String strDemandId, String strDemandTypeId )
+    {
+        AppLogService.info( "DemandDataSource doesn't manage onDeleteDemand method" );
     }
 
 }

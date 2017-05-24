@@ -32,27 +32,93 @@
  * License 1.0
  */
 
-
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.email;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
-import java.util.Collection;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
+import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
+import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
+import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
+import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
- * DemandDataSource
+ * EmailDataSource
  */
-public class EmailDataSource extends AbstractDataSource implements DataSource
+public class EmailDataSource extends AbstractDataSource implements DataSource, INotificationListener
 {
+    INotificationDAO _notificationDAO;
+
+    /**
+     * Set the INotificationDAO to use
+     * 
+     * @param notificationDAO
+     */
+    public void setNotificationDAO( INotificationDAO notificationDAO )
+    {
+        _notificationDAO = notificationDAO;
+    }
+
     /**
      * {@inheritDoc }
      */
     @Override
-    public Collection<DataObject> getDataObjects()
+    public Collection<DataObject> getDataObjects( )
     {
-        EmailDAO _dao = new EmailDAO();
-        return _dao.getEmailList();
+        Collection<DataObject> collResult = new ArrayList<DataObject>( );
+        NotificationFilter filter = new NotificationFilter( );
+        filter.setHasCustomerEmailNotification( true );
+        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
+        {
+            collResult.add( new BaseDemandObject( notifDAO ) );
+        }
+        return collResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onCreateNotification( Notification notification )
+    {
+        if ( notification == null || notification.getEmailNotification( ) == null )
+        {
+            return;
+        }
+        BaseDemandObject notificationObj = new BaseDemandObject( notification );
+        try
+        {
+            DataSourceService.insertData( this, notificationObj );
+        }
+        catch( ElasticClientException e )
+        {
+            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for notification [" + notification.getId( ) + "]", e );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onUpdateNotification( Notification notification )
+    {
+        AppLogService.info( "EmailDataSource doesn't manage onUpdateNotification method" );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDeleteDemand( String strDemandId, String strDemandTypeId )
+    {
+        AppLogService.info( "EmailDataSource doesn't manage onDeleteDemand method" );
     }
 
 }
