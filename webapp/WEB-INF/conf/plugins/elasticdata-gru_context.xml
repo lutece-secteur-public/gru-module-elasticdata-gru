@@ -15,8 +15,8 @@
 
         <!-- GruSupply DAO configuration -->
             <!--
-            <bean id="elasticdata-gru.demandDAO" parent="grusupply.demandDAO" />
-            <bean id="elasticdata-gru.notificationDAO" parent="grusupply.notificationDAO" />
+            <alias name="grusupply.demandDAO" alias="elasticdata-gru.demandDAO" />
+            <alias name="grusupply.notificationDAO" alias="elasticdata-gru.notificationDAO" />
             -->    
         <!-- GruStorageDB DAO Configuration -->    
             <!--
