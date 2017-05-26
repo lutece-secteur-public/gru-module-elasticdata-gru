@@ -34,7 +34,7 @@
 
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business;
 
-import fr.paris.lutece.plugins.elasticdata.business.DataObject;
+import fr.paris.lutece.plugins.elasticdata.business.AbstractDataObject;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -42,12 +42,11 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 /**
  * BaseDemandObject
  */
-public class BaseDemandObject implements DataObject
+public class BaseDemandObject extends AbstractDataObject
 {
     private static final String PREFIX = "elasticdata-gru.demand.type_label.";
     private static final String DEFAULT_DEMAND_TYPE = "Not defined";
 
-    private long _lTimestamp;
     private String _strDemandType;
     private String _strDemandTypeId;
 
@@ -57,56 +56,41 @@ public class BaseDemandObject implements DataObject
     public BaseDemandObject( )
     {
         super( );
-        this._strDemandType = DEFAULT_DEMAND_TYPE;
-        this._strDemandTypeId = "";
+        _strDemandType = DEFAULT_DEMAND_TYPE;
+        _strDemandTypeId = "";
     }
 
     /**
      * Constructor with Demand
+     * @param demand The demand
      */
     public BaseDemandObject( Demand demand )
     {
         super( );
         if ( demand != null )
         {
-            this._strDemandTypeId = demand.getTypeId( );
-            this._strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
-            this._lTimestamp = demand.getCreationDate( );
+            _strDemandTypeId = demand.getTypeId( );
+            _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+            setTimestamp( demand.getCreationDate( ) );
         }
     }
 
     /**
      * Constructor with Notification
+     * @param notification The notification
      */
     public BaseDemandObject( Notification notification )
     {
         super( );
         if ( notification != null )
         {
-            this._lTimestamp = notification.getDate( );
+            setTimestamp( notification.getDate( ) );
             if ( notification.getDemand( ) != null )
             {
-                this._strDemandTypeId = notification.getDemand( ).getTypeId( );
-                this._strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+                _strDemandTypeId = notification.getDemand( ).getTypeId( );
+                _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
             }
         }
-    }
-
-    @Override
-    public String getTimestamp( )
-    {
-        return String.valueOf( _lTimestamp );
-    }
-
-    /**
-     * Set the notification timestamp
-     * 
-     * @param lTimestamp
-     *            the notification timestamp
-     */
-    public void setTimestamp( long lTimestamp )
-    {
-        _lTimestamp = lTimestamp;
     }
 
     /**
@@ -140,5 +124,5 @@ public class BaseDemandObject implements DataObject
     {
         return _strDemandType;
     }
-
+        
 }
