@@ -1,0 +1,200 @@
+[
+  {
+    "_id": "7919e5b0-2b5e-11e7-876d-37fb1fbae894",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Tableau de bord des demandes (6 derniers mois)",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":1,\"id\":\"b1c9fdb0-2c20-11e7-9d4c-495808d4fa44\",\"panelIndex\":1,\"row\":7,\"size_x\":4,\"size_y\":4,\"type\":\"visualization\"},{\"col\":5,\"id\":\"5159a870-2c22-11e7-9d4c-495808d4fa44\",\"panelIndex\":4,\"row\":1,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":5,\"id\":\"7059fd40-2c24-11e7-9d4c-495808d4fa44\",\"panelIndex\":5,\"row\":7,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":1,\"id\":\"76e80a20-2c25-11e7-9d4c-495808d4fa44\",\"panelIndex\":6,\"row\":3,\"size_x\":7,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"defbb000-2c28-11e7-9d4c-495808d4fa44\",\"panelIndex\":7,\"row\":1,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":8,\"id\":\"65b59810-420c-11e7-b4fd-0b547e5154d3\",\"panelIndex\":8,\"row\":1,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":8,\"id\":\"e1ef64a0-420d-11e7-b4fd-0b547e5154d3\",\"panelIndex\":9,\"row\":4,\"size_x\":5,\"size_y\":4,\"type\":\"visualization\"},{\"col\":8,\"id\":\"62651b40-4211-11e7-b4fd-0b547e5154d3\",\"panelIndex\":10,\"row\":8,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":5,\"id\":\"1080a3c0-4212-11e7-b4fd-0b547e5154d3\",\"panelIndex\":11,\"row\":9,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"}]",
+      "optionsJSON": "{\"darkTheme\":false}",
+      "uiStateJSON": "{\"P-1\":{\"vis\":{\"colors\":{\"Demande de documentation\":\"#447EBC\",\"Modification données personnelles\":\"#E5A8E2\",\"Sollicitation\":\"#D683CE\"}}},\"P-10\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#AEA2E0\"}}},\"P-6\":{\"vis\":{\"colors\":{\"Count\":\"#BADFF4\",\"Nombre de demande\":\"#BA43A9\",\"Nombre de demandes\":\"#82B5D8\"},\"legendOpen\":true}},\"P-8\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#5195CE\"}}}}",
+      "version": 1,
+      "timeRestore": true,
+      "timeTo": "now",
+      "timeFrom": "now-6M",
+      "refreshInterval": {
+        "display": "Off",
+        "pause": false,
+        "value": 0
+      },
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"highlightAll\":true,\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}],\"version\":true}"
+      }
+    }
+  },
+  {
+    "_id": "24599290-4536-11e7-8073-71c7876e97b9",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Tableau de bord des demandes (30 derniers jours)",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":1,\"id\":\"b1c9fdb0-2c20-11e7-9d4c-495808d4fa44\",\"panelIndex\":1,\"row\":7,\"size_x\":4,\"size_y\":4,\"type\":\"visualization\"},{\"col\":5,\"id\":\"5159a870-2c22-11e7-9d4c-495808d4fa44\",\"panelIndex\":4,\"row\":1,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":5,\"id\":\"7059fd40-2c24-11e7-9d4c-495808d4fa44\",\"panelIndex\":5,\"row\":7,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":1,\"id\":\"76e80a20-2c25-11e7-9d4c-495808d4fa44\",\"panelIndex\":6,\"row\":3,\"size_x\":7,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"defbb000-2c28-11e7-9d4c-495808d4fa44\",\"panelIndex\":7,\"row\":1,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":8,\"id\":\"65b59810-420c-11e7-b4fd-0b547e5154d3\",\"panelIndex\":8,\"row\":1,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":8,\"id\":\"e1ef64a0-420d-11e7-b4fd-0b547e5154d3\",\"panelIndex\":9,\"row\":4,\"size_x\":5,\"size_y\":4,\"type\":\"visualization\"},{\"col\":8,\"id\":\"62651b40-4211-11e7-b4fd-0b547e5154d3\",\"panelIndex\":10,\"row\":8,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":5,\"id\":\"1080a3c0-4212-11e7-b4fd-0b547e5154d3\",\"panelIndex\":11,\"row\":9,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"}]",
+      "optionsJSON": "{\"darkTheme\":false}",
+      "uiStateJSON": "{\"P-1\":{\"vis\":{\"colors\":{\"Demande de documentation\":\"#447EBC\",\"Modification données personnelles\":\"#E5A8E2\",\"Sollicitation\":\"#D683CE\"}}},\"P-10\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#AEA2E0\"}}},\"P-6\":{\"vis\":{\"colors\":{\"Count\":\"#BADFF4\",\"Nombre de demande\":\"#BA43A9\",\"Nombre de demandes\":\"#82B5D8\"},\"legendOpen\":true}},\"P-8\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#5195CE\"}}}}",
+      "version": 1,
+      "timeRestore": true,
+      "timeTo": "now",
+      "timeFrom": "now-30d",
+      "refreshInterval": {
+        "display": "Off",
+        "pause": false,
+        "value": 0
+      },
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"highlightAll\":true,\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}],\"version\":true}"
+      }
+    }
+  },
+  {
+    "_id": "69131be0-4536-11e7-8073-71c7876e97b9",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Tableau de bord des demandes (Aujourd'hui)",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":1,\"id\":\"b1c9fdb0-2c20-11e7-9d4c-495808d4fa44\",\"panelIndex\":1,\"row\":7,\"size_x\":4,\"size_y\":4,\"type\":\"visualization\"},{\"col\":5,\"id\":\"5159a870-2c22-11e7-9d4c-495808d4fa44\",\"panelIndex\":4,\"row\":1,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":5,\"id\":\"7059fd40-2c24-11e7-9d4c-495808d4fa44\",\"panelIndex\":5,\"row\":7,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":1,\"id\":\"76e80a20-2c25-11e7-9d4c-495808d4fa44\",\"panelIndex\":6,\"row\":3,\"size_x\":7,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"defbb000-2c28-11e7-9d4c-495808d4fa44\",\"panelIndex\":7,\"row\":1,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":8,\"id\":\"65b59810-420c-11e7-b4fd-0b547e5154d3\",\"panelIndex\":8,\"row\":1,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":8,\"id\":\"e1ef64a0-420d-11e7-b4fd-0b547e5154d3\",\"panelIndex\":9,\"row\":4,\"size_x\":5,\"size_y\":4,\"type\":\"visualization\"},{\"col\":8,\"id\":\"62651b40-4211-11e7-b4fd-0b547e5154d3\",\"panelIndex\":10,\"row\":8,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":5,\"id\":\"1080a3c0-4212-11e7-b4fd-0b547e5154d3\",\"panelIndex\":11,\"row\":9,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"}]",
+      "optionsJSON": "{\"darkTheme\":false}",
+      "uiStateJSON": "{\"P-1\":{\"vis\":{\"colors\":{\"Demande de documentation\":\"#447EBC\",\"Modification données personnelles\":\"#E5A8E2\",\"Sollicitation\":\"#D683CE\"}}},\"P-10\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#AEA2E0\"}}},\"P-6\":{\"vis\":{\"colors\":{\"Count\":\"#BADFF4\",\"Nombre de demande\":\"#BA43A9\",\"Nombre de demandes\":\"#82B5D8\"},\"legendOpen\":true}},\"P-8\":{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#5195CE\"}}}}",
+      "version": 1,
+      "timeRestore": true,
+      "timeTo": "now/d",
+      "timeFrom": "now/d",
+      "refreshInterval": {
+        "display": "Off",
+        "pause": false,
+        "value": 0
+      },
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"highlightAll\":true,\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}],\"version\":true}"
+      }
+    }
+  },
+  {
+    "_id": "7059fd40-2c24-11e7-9d4c-495808d4fa44",
+    "_type": "visualization",
+    "_source": {
+      "title": "Nombre de notifications",
+      "visState": "{\"title\":\"Nombre de notifications\",\"type\":\"metric\",\"params\":{\"handleNoResults\":true,\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de notifications\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"notifications\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "65b59810-420c-11e7-b4fd-0b547e5154d3",
+    "_type": "visualization",
+    "_source": {
+      "title": "Activité par jour de la semaine",
+      "visState": "{\"title\":\"Activité par jour de la semaine\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de demandes\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"dayOfWeek.keyword\",\"size\":7,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Jour de la semaine\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#1F78C1\"}}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "e1ef64a0-420d-11e7-b4fd-0b547e5154d3",
+    "_type": "visualization",
+    "_source": {
+      "title": "Activité par heure de la journée",
+      "visState": "{\"title\":\"Activité par heure de la journée\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de demandes\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"hour.keyword\",\"size\":24,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Heure de la journée\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#1F78C1\"}}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "62651b40-4211-11e7-b4fd-0b547e5154d3",
+    "_type": "visualization",
+    "_source": {
+      "title": "Activité par mois",
+      "visState": "{\"title\":\"Activité par mois\",\"type\":\"histogram\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"scale\":\"linear\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de demandes\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"month.keyword\",\"size\":12,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Mois\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{\"vis\":{\"colors\":{\"Nombre de demandes\":\"#1F78C1\"}}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "5159a870-2c22-11e7-9d4c-495808d4fa44",
+    "_type": "visualization",
+    "_source": {
+      "title": "Nombre de demandes sur la période",
+      "visState": "{\"title\":\"Nombre de demandes sur la période\",\"type\":\"metric\",\"params\":{\"handleNoResults\":true,\"fontSize\":\"60\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de demandes\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "1080a3c0-4212-11e7-b4fd-0b547e5154d3",
+    "_type": "visualization",
+    "_source": {
+      "title": "Nombre de mails envoyés",
+      "visState": "{\"title\":\"Nombre de mails envoyés\",\"type\":\"metric\",\"params\":{\"handleNoResults\":true,\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de mails envoyés\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"emails\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "defbb000-2c28-11e7-9d4c-495808d4fa44",
+    "_type": "visualization",
+    "_source": {
+      "title": "Titre tableau de bord",
+      "visState": "{\"title\":\"Titre tableau de bord\",\"type\":\"markdown\",\"params\":{\"markdown\":\"# Activité de la GRU\\nTableau de bord des indicateurs\"},\"aggs\":[],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "76e80a20-2c25-11e7-9d4c-495808d4fa44",
+    "_type": "visualization",
+    "_source": {
+      "title": "Nombre de demandes sur la période",
+      "visState": "{\"title\":\"Nombre de demandes sur la période\",\"type\":\"area\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"scale\":\"linear\",\"interpolate\":\"cardinal\",\"mode\":\"stacked\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":true,\"setYExtents\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre de demandes\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"timestamp\",\"interval\":\"auto\",\"customInterval\":\"2h\",\"min_doc_count\":1,\"extended_bounds\":{},\"customLabel\":\"date\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_id": "b1c9fdb0-2c20-11e7-9d4c-495808d4fa44",
+    "_type": "visualization",
+    "_source": {
+      "title": "Répartition des demandes par type",
+      "visState": "{\"title\":\"Répartition des demandes par type\",\"type\":\"pie\",\"params\":{\"addLegend\":true,\"addTooltip\":true,\"isDonut\":false,\"legendPosition\":\"bottom\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Nombre\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"demandType.keyword\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Nombre de demandes\"}}],\"listeners\":{}}",
+      "uiStateJSON": "{\"vis\":{\"colors\":{\"Sollicitation\":\"#962D82\"},\"legendOpen\":true}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"demands\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"
+      }
+    }
+  }
+]
