@@ -1,13 +1,13 @@
-
-#Module elasticdata gru
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=gru-module-elasticdata-gru-deploy)
+# Module elasticdata gru
 
 ![](http://dev.lutece.paris.fr/plugins/module-elasticdata-gru/images/elastic.png)
 
-##Introduction
+## Introduction
 
-Module de production de données de la GRU pour ElasticSearch / Kibana
+Module de production de donnÃ©es de la GRU pour ElasticSearch / Kibana
 
-##Configuration
+## Configuration
 
 Configurer les labels des types de demande dans le fichier **elasticdata-gru.properties** 
 
