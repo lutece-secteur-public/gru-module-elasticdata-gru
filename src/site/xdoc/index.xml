@@ -9,10 +9,14 @@
                 <img src="images/elastic.png" />
             </p>
             <subsection name="Introduction">
-                <p>Module de production de données de la GRU pour ElasticSearch / Kibana</p>
+                <p>Module de production de donn&amp;eacute;es de la GRU pour ElasticSearch / Kibana</p>
             </subsection>
             <subsection name="Configuration">
                 <p>Configurer les labels des types de demande dans le fichier <b>elasticdata-gru.properties</b></p>
+                <p>
+                L'initialisation des beans de DataSource n&amp;eacute;cessite la valorisation des DAOs&amp;nbsp;&amp;agrave; utiliser.
+                De plus, les DataSource impl&amp;eacute;mente les interfaces IDemandListener et INotificationListener qui sont donc utilisable dans DemandService.
+                </p>
             </subsection>
         </section>
     </body>
