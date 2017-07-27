@@ -44,11 +44,15 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public class BaseDemandObject extends AbstractDataObject
 {
-    private static final String PREFIX = "elasticdata-gru.demand.type_label.";
+    private static final String PREFIX_DEMAND_TYPE = "elasticdata-gru.demand.type_label.";
     private static final String DEFAULT_DEMAND_TYPE = "Not defined";
+    private static final String PREFIX_DEMAND_SUBTYPE = "elasticdata-gru.demand.subtype_label.";
+    private static final String DEFAULT_DEMAND_SUBTYPE = "Not defined";
 
     private String _strDemandType;
     private String _strDemandTypeId;
+    private String _strDemandSubtype;
+    private String _strDemandSubtypeId;
 
     /**
      * Base constructor
@@ -58,6 +62,8 @@ public class BaseDemandObject extends AbstractDataObject
         super( );
         _strDemandType = DEFAULT_DEMAND_TYPE;
         _strDemandTypeId = "";
+        _strDemandSubtype = DEFAULT_DEMAND_SUBTYPE;
+        _strDemandSubtypeId = "";
     }
 
     /**
@@ -70,7 +76,9 @@ public class BaseDemandObject extends AbstractDataObject
         if ( demand != null )
         {
             _strDemandTypeId = demand.getTypeId( );
-            _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+            _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+            _strDemandSubtypeId = demand.getSubtypeId( );
+            _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
             setTimestamp( demand.getCreationDate( ) );
         }
     }
@@ -88,7 +96,9 @@ public class BaseDemandObject extends AbstractDataObject
             if ( notification.getDemand( ) != null )
             {
                 _strDemandTypeId = notification.getDemand( ).getTypeId( );
-                _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+                _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+                _strDemandSubtypeId = notification.getDemand( ).getSubtypeId( );
+                _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
             }
         }
     }
@@ -112,7 +122,7 @@ public class BaseDemandObject extends AbstractDataObject
     public void setDemandTypeId( String strDemandTypeId )
     {
         _strDemandTypeId = strDemandTypeId;
-        _strDemandType = AppPropertiesService.getProperty( PREFIX + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
+        _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
     }
 
     /**
@@ -123,6 +133,38 @@ public class BaseDemandObject extends AbstractDataObject
     public String getDemandType( )
     {
         return _strDemandType;
+    }
+
+    /**
+     * Returns the DemandSubtype Id
+     *
+     * @return The DemandSubtype Id
+     */
+    public String getDemandSubtypeId( )
+    {
+        return _strDemandSubtypeId;
+    }
+
+    /**
+     * Set the demand type id
+     * 
+     * @param strDemandSubtypeId
+     *            the demand type id
+     */
+    public void setDemandSubtypeId( String strDemandSubtypeId )
+    {
+        _strDemandSubtypeId = strDemandSubtypeId;
+        _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
+    }
+
+    /**
+     * Returns the DemandSubtype
+     *
+     * @return The DemandSubtype
+     */
+    public String getDemandSubtype( )
+    {
+        return _strDemandSubtype;
     }
         
 }
