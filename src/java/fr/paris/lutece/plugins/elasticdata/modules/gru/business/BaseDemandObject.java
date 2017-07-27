@@ -68,7 +68,9 @@ public class BaseDemandObject extends AbstractDataObject
 
     /**
      * Constructor with Demand
-     * @param demand The demand
+     * 
+     * @param demand
+     *            The demand
      */
     public BaseDemandObject( Demand demand )
     {
@@ -85,7 +87,9 @@ public class BaseDemandObject extends AbstractDataObject
 
     /**
      * Constructor with Notification
-     * @param notification The notification
+     * 
+     * @param notification
+     *            The notification
      */
     public BaseDemandObject( Notification notification )
     {
@@ -166,5 +170,5 @@ public class BaseDemandObject extends AbstractDataObject
     {
         return _strDemandSubtype;
     }
-        
+
 }
