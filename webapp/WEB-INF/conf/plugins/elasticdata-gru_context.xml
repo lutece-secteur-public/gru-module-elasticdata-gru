@@ -10,8 +10,8 @@
         
         <!-- Mock DAO configuration -->
         
-            <bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grubusiness.business.demand.MockDemandDAO" />
-            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.notification.MockNotificationDAO" />
+            <bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockDemandDAO" />
+            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockNotificationDAO" />
 
         <!-- GruSupply DAO configuration -->
             <!--
