@@ -121,4 +121,19 @@ public class SmsDataSource extends AbstractDataSource implements DataSource, INo
         AppLogService.info( "SmsDataSource doesn't manage onDeleteDemand method" );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<BaseDemandObject> fetchDataObjects( )
+    {
+        Collection<BaseDemandObject> collResult = new ArrayList<>( );
+        NotificationFilter filter = new NotificationFilter( );
+        filter.setHasSmsNotification( true );
+        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
+        {
+            collResult.add( new BaseDemandObject( notifDAO ) );
+        }
+        return collResult;
+    }
 }

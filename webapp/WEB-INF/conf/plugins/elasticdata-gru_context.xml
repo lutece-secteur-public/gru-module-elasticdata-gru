@@ -25,7 +25,7 @@
             -->
         <!-- ######################  End of DAO Configuration  ############### -->
        
-       
+       <bean id="elasticdata-gru.demandTypeService" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService"/>
        
        <bean id="elasticdata-gru.demandDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource" >
            <property name="id" value="DemandDataSource" />
@@ -33,6 +33,7 @@
            <property name="targetIndexName" value="demands" />
            <property name="dataType" value="demand" />
            <property name="demandDAO" ref="elasticdata-gru.demandDAO" />
+           <property name="externalAttributesProvider" ref="elasticdata-gru.listDemandTypeExternalProvider"/>
        </bean>
 
        <bean id="elasticdata-gru.notificationDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource" >
@@ -58,5 +59,13 @@
            <property name="dataType" value="sms" />
            <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
-
+       
+        <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
+        <bean id="elasticdata-gru.listDemandTypeExternalProvider" class="java.util.ArrayList">
+            <constructor-arg>
+                <list>
+                    <ref bean="elasticdata-gru.demandTypeExternalProvider" />            
+                </list>
+            </constructor-arg>
+        </bean>
 </beans>

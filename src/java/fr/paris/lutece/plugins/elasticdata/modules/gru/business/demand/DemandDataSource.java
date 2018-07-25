@@ -34,26 +34,33 @@
 
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
+import fr.paris.lutece.plugins.crmclient.util.CRMException;
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandDAO;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandListener;
 import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import javax.inject.Inject;
 
 /**
  * DemandDataSource
  */
-public class DemandDataSource extends AbstractDataSource implements DataSource, IDemandListener
+public class DemandDataSource extends AbstractDataSource implements IDemandListener
 {
     IDemandDAO _demandDAO;
+
+    @Inject
+    DemandTypeService _demandTypeService;
 
     /**
      * Set the IDemandDAO to use
@@ -66,30 +73,28 @@ public class DemandDataSource extends AbstractDataSource implements DataSource, 
     }
 
     /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Collection<DataObject> getDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<DataObject>( );
-        for ( Demand demandDAO : _demandDAO.loadAllDemands( ) )
-        {
-            collResult.add( new BaseDemandObject( demandDAO ) );
-        }
-        return collResult;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public void onCreateDemand( Demand demand )
     {
         BaseDemandObject demandObj = new BaseDemandObject( demand );
+
         try
         {
+            Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+            demandObj.setDemandType( listDemandTypes.get( demandObj.getDemandTypeId( ) ) );
             DataSourceService.insertData( this, demandObj );
         }
+        catch( CRMException e )
+        {
+            AppLogService.error( "Unable to get remote demand types " + demandObj.getDemandTypeId( ) + " " + e.getMessage( ), e );
+        }
+        catch( IOException e )
+        {
+            AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
+        }
+
         catch( ElasticClientException e )
         {
             AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for demand [" + demand.getId( ) + "]", e );
@@ -114,4 +119,17 @@ public class DemandDataSource extends AbstractDataSource implements DataSource, 
         AppLogService.info( "DemandDataSource doesn't manage onDeleteDemand method" );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection fetchDataObjects( )
+    {
+        Collection<DataObject> collResult = new ArrayList<>( );
+        for ( Demand demandDAO : _demandDAO.loadAllDemands( ) )
+        {
+            collResult.add( new BaseDemandObject( demandDAO ) );
+        }
+        return collResult;
+    }
 }

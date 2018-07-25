@@ -140,6 +140,16 @@ public class BaseDemandObject extends AbstractDataObject
     }
 
     /**
+     * Set the demand type
+     * 
+     * @param strDemandType
+     */
+    public void setDemandType( String strDemandType )
+    {
+        _strDemandType = strDemandType;
+    }
+
+    /**
      * Returns the DemandSubtype Id
      *
      * @return The DemandSubtype Id

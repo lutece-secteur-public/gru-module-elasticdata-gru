@@ -67,22 +67,6 @@ public class EmailDataSource extends AbstractDataSource implements DataSource, I
     }
 
     /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Collection<DataObject> getDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<DataObject>( );
-        NotificationFilter filter = new NotificationFilter( );
-        filter.setHasCustomerEmailNotification( true );
-        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
-        {
-            collResult.add( new BaseDemandObject( notifDAO ) );
-        }
-        return collResult;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -119,6 +103,19 @@ public class EmailDataSource extends AbstractDataSource implements DataSource, I
     public void onDeleteDemand( String strDemandId, String strDemandTypeId )
     {
         AppLogService.info( "EmailDataSource doesn't manage onDeleteDemand method" );
+    }
+
+    @Override
+    public Collection<BaseDemandObject> fetchDataObjects( )
+    {
+        Collection<BaseDemandObject> collResult = new ArrayList<>( );
+        NotificationFilter filter = new NotificationFilter( );
+        filter.setHasCustomerEmailNotification( true );
+        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
+        {
+            collResult.add( new BaseDemandObject( notifDAO ) );
+        }
+        return collResult;
     }
 
 }

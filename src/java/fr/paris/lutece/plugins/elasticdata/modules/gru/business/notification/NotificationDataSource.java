@@ -120,4 +120,18 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
         AppLogService.info( "NotificationDataSource doesn't manage onDeleteDemand method" );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<BaseDemandObject> fetchDataObjects( )
+    {
+        Collection<BaseDemandObject> collResult = new ArrayList<>( );
+        NotificationFilter filter = new NotificationFilter( );
+        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
+        {
+            collResult.add( new BaseDemandObject( notifDAO ) );
+        }
+        return collResult;
+    }
 }
