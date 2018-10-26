@@ -37,7 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.paris.lutece.plugins.crmclient.service.ICRMClientService;
 import fr.paris.lutece.plugins.crmclient.util.CRMException;
 import fr.paris.lutece.plugins.grubusiness.business.demand.DemandType;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +52,15 @@ import javax.inject.Inject;
  */
 public class DemandTypeService
 {
-    ObjectMapper _mapper = new ObjectMapper( );
-
+    private static final String PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE = "elasticdata-gru.demandType.delayForNewFetch";
+    
+    
     @Inject
     ICRMClientService _crmClientService;
+    
+    Map<String,String> _mapDemandType;
+    Instant _instantLastFetchingDemandType;
+    ObjectMapper _mapper = new ObjectMapper( );
 
     /**
      * Get a the remote demand types as Map of String,String
@@ -61,12 +69,34 @@ public class DemandTypeService
      * @throws CRMException
      * @throws IOException
      */
-    public Map<String, String> getDemandTypes( ) throws CRMException, IOException
+    public Map<String, String> fetchDemandTypes( ) throws CRMException, IOException
     {
         String strResponse = _crmClientService.getCRMDemandTypes( );
         DemandType [ ] tabDemandTypes = _mapper.readValue( strResponse, DemandType [ ].class );
         List<DemandType> listDemandTypes = Arrays.asList( tabDemandTypes );
+        
         return listDemandTypes.stream( ).collect(
                 Collectors.toMap( demandType -> Integer.toString( demandType.getIdDemandType( ) ), demandType -> demandType.getLabel( ) ) );
+    }
+    
+    /**
+     * Get the demand types map ( stored or fetched )
+     * @return the map of demand type ( id / label )
+     * @throws CRMException
+     *              The CRM exception
+     * @throws IOException 
+     *              The IO exeption
+     */
+    public Map<String,String> getDemandTypes( ) throws CRMException, IOException
+    {
+        Instant iNow = Instant.now();
+        Duration between = Duration.between( iNow, _instantLastFetchingDemandType);
+        long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60);
+        
+        if ( between.toMinutes() > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty() )
+        {
+            _mapDemandType = fetchDemandTypes();
+        }
+        return _mapDemandType;
     }
 }
