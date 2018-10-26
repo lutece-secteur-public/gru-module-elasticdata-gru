@@ -38,21 +38,33 @@ import fr.paris.lutece.plugins.elasticdata.business.AbstractDataObject;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.web.l10n.LocaleService;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * BaseDemandObject
  */
 public class BaseDemandObject extends AbstractDataObject
 {
-    private static final String PREFIX_DEMAND_TYPE = "elasticdata-gru.demand.type_label.";
     private static final String DEFAULT_DEMAND_TYPE = "Not defined";
     private static final String PREFIX_DEMAND_SUBTYPE = "elasticdata-gru.demand.subtype_label.";
     private static final String DEFAULT_DEMAND_SUBTYPE = "Not defined";
 
     private String _strDemandType;
+    private String _strConnectionId;
     private String _strDemandTypeId;
     private String _strDemandSubtype;
     private String _strDemandSubtypeId;
+    private long _lTimestampClosure;
+    private String _strDayOfWeekClosure;
+    private String _strMonthClosure;
+    private String _strHourClosure;
+    private String _strPrefixedDayOfWeekClosure;
+    private String _strPrefixedMonthClosure;
+    private Map<String,String> _mapCustomerIdentityAttributes;
 
     /**
      * Base constructor
@@ -64,6 +76,14 @@ public class BaseDemandObject extends AbstractDataObject
         _strDemandTypeId = "";
         _strDemandSubtype = DEFAULT_DEMAND_SUBTYPE;
         _strDemandSubtypeId = "";
+        _strConnectionId = "";
+        _mapCustomerIdentityAttributes = new HashMap<>();
+        _strDayOfWeekClosure = "";
+        _strMonthClosure="";
+        _strHourClosure="";
+        _strPrefixedDayOfWeekClosure="";
+        _strPrefixedMonthClosure="";
+        _lTimestampClosure=0;
     }
 
     /**
@@ -78,10 +98,19 @@ public class BaseDemandObject extends AbstractDataObject
         if ( demand != null )
         {
             _strDemandTypeId = demand.getTypeId( );
-            _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
             _strDemandSubtypeId = demand.getSubtypeId( );
+            _strConnectionId = demand.getCustomer( ).getId( );
             _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
             setTimestamp( demand.getCreationDate( ) );
+            _lTimestampClosure = demand.getClosureDate();
+            Locale locale = LocaleService.getDefault();
+            Calendar calendar = Calendar.getInstance( locale );
+            calendar.setTimeInMillis( _lTimestampClosure );
+            _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG , locale );
+            _strPrefixedDayOfWeekClosure = ((( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
+            _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG , locale );
+            _strPrefixedMonthClosure = String.format( "%02d" , calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
+            _strHourClosure = String.format( "%02d" , calendar.get(Calendar.HOUR_OF_DAY ));
         }
     }
 
@@ -100,9 +129,18 @@ public class BaseDemandObject extends AbstractDataObject
             if ( notification.getDemand( ) != null )
             {
                 _strDemandTypeId = notification.getDemand( ).getTypeId( );
-                _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
                 _strDemandSubtypeId = notification.getDemand( ).getSubtypeId( );
                 _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
+                _strConnectionId = notification.getDemand( ).getCustomer( ).getId( );
+                _lTimestampClosure = notification.getDemand().getClosureDate();
+                Locale locale = LocaleService.getDefault();
+                Calendar calendar = Calendar.getInstance( locale );
+                calendar.setTimeInMillis( _lTimestampClosure );
+                _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG , locale );
+                _strPrefixedDayOfWeekClosure = ((( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
+                _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG , locale );
+                _strPrefixedMonthClosure = String.format( "%02d" , calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
+                _strHourClosure = String.format( "%02d" , calendar.get(Calendar.HOUR_OF_DAY ));
             }
         }
     }
@@ -126,7 +164,6 @@ public class BaseDemandObject extends AbstractDataObject
     public void setDemandTypeId( String strDemandTypeId )
     {
         _strDemandTypeId = strDemandTypeId;
-        _strDemandType = AppPropertiesService.getProperty( PREFIX_DEMAND_TYPE + _strDemandTypeId, DEFAULT_DEMAND_TYPE );
     }
 
     /**
@@ -180,5 +217,92 @@ public class BaseDemandObject extends AbstractDataObject
     {
         return _strDemandSubtype;
     }
+
+    /**
+     * Get the connection id of the user of the demand
+     * @return the connection id
+     */
+    public String getConnectionId() {
+        return _strConnectionId;
+    }
+
+    /**
+     * Set the connection id of the user of the demand
+     * @param strConnectionId the connection id
+     */
+    public void setConnectionId(String strConnectionId)
+    {
+        _strConnectionId = strConnectionId;
+    }
+
+    /**
+     * Get customer identity attributes
+     * @return the map of customer identity attributes
+     */
+    public Map<String, String> getCustomerIdentityAttributes() {
+        return _mapCustomerIdentityAttributes;
+    }
+
+    /**
+     * Set the customer identity attributes map
+     * @param mapCustomerIdentityAttributes 
+     */
+    public void setCustomerIdentityAttributes (Map<String, String> mapCustomerIdentityAttributes ) 
+    {
+        _mapCustomerIdentityAttributes = mapCustomerIdentityAttributes;
+    }
+
+    /**
+     * Get the timestamp of the closure of the demand
+     * @return The timestamp of the closure of the demand
+     */
+    public String getTimestampClosure() 
+    {
+        return String.valueOf(_lTimestampClosure);
+    }
+
+    /**
+     * Get the day of week of the closure of the demand
+     * @return the day of week of the closure of the demand
+     */
+    public String getDayOfWeekClosure() 
+    {
+        return _strDayOfWeekClosure;
+    }
+
+    /**
+     * Get the month of the closure of the demand
+     * @return the month of the closure of the demand
+     */
+    public String getMonthClosure() 
+    {
+        return _strMonthClosure;
+    }
+
+    /**
+     * Get the hour of the closure of the demand
+     * @return the hour of the closure of the demand
+     */
+    public String getHourClosure() {
+        return _strHourClosure;
+    }
+
+    /**
+     * Get the prefixed day of week of the closure of the demand
+     * @return the prefixed day of week of the closure of the demand
+     */
+    public String getPrefixedDayOfWeekClosure() {
+        return _strPrefixedDayOfWeekClosure;
+    }
+
+    /**
+     * Get the prefixed month of the closure of the demand
+     * @return the prefixed month of the closure of the demand
+     */
+    public String getPrefixedMonthClosure() {
+        return _strPrefixedMonthClosure;
+    }
+    
+    
 
 }
