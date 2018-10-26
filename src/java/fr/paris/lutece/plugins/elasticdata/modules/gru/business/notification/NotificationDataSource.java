@@ -94,7 +94,7 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
         BaseDemandObject notificationObj = new BaseDemandObject( notification );
         try
         {
-            DataSourceService.insertData( this, notificationObj );
+            DataSourceService.processIncrementalIndexing( this, notificationObj );
         }
         catch( ElasticClientException e )
         {

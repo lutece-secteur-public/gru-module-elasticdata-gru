@@ -95,7 +95,7 @@ public class SmsDataSource extends AbstractDataSource implements DataSource, INo
         BaseDemandObject notificationObj = new BaseDemandObject( notification );
         try
         {
-            DataSourceService.insertData( this, notificationObj );
+            DataSourceService.processIncrementalIndexing( this, notificationObj );
         }
         catch( ElasticClientException e )
         {

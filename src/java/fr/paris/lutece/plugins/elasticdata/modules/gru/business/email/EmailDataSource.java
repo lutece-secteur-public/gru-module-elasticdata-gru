@@ -79,7 +79,7 @@ public class EmailDataSource extends AbstractDataSource implements DataSource, I
         BaseDemandObject notificationObj = new BaseDemandObject( notification );
         try
         {
-            DataSourceService.insertData( this, notificationObj );
+            DataSourceService.processIncrementalIndexing( this, notificationObj );
         }
         catch( ElasticClientException e )
         {
