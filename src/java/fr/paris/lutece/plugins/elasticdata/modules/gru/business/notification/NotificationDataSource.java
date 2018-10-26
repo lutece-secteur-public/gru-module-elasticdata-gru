@@ -124,9 +124,9 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
      * {@inheritDoc}
      */
     @Override
-    public Collection<BaseDemandObject> fetchDataObjects( )
+    public Collection<DataObject> fetchDataObjects( )
     {
-        Collection<BaseDemandObject> collResult = new ArrayList<>( );
+        Collection<DataObject> collResult = new ArrayList<>( );
         NotificationFilter filter = new NotificationFilter( );
         for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
         {
