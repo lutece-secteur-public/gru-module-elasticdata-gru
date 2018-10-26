@@ -29,6 +29,7 @@
        
        <!-- External attributes providers --> 
        <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
+       <bean id="elasticdata-gru.identitystoreExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.IdentitystoreProvider" />
 
        <bean id="elasticdata-gru.demandDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource" >
            <property name="id" value="DemandDataSource" />
@@ -39,6 +40,7 @@
            <property name="externalAttributesProvider">
     		<list value-type="fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider">
     			<ref bean="elasticdata-gru.demandTypeExternalProvider"/>
+    			<ref bean="elasticdata-gru.identitystoreExternalProvider"/>
     		</list>
             </property>
        </bean>
