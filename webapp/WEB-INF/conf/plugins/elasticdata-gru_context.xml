@@ -27,13 +27,20 @@
        
        <bean id="elasticdata-gru.demandTypeService" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService"/>
        
+       <!-- External attributes providers --> 
+       <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
+
        <bean id="elasticdata-gru.demandDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource" >
            <property name="id" value="DemandDataSource" />
            <property name="name" value="Base des demandes de la GRU" />
            <property name="targetIndexName" value="demands" />
            <property name="dataType" value="demand" />
            <property name="demandDAO" ref="elasticdata-gru.demandDAO" />
-           <property name="externalAttributesProvider" ref="elasticdata-gru.listDemandTypeExternalProvider"/>
+           <property name="externalAttributesProvider">
+    		<list value-type="fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider">
+    			<ref bean="elasticdata-gru.demandTypeExternalProvider"/>
+    		</list>
+            </property>
        </bean>
 
        <bean id="elasticdata-gru.notificationDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource" >
@@ -60,12 +67,4 @@
            <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
        
-        <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
-        <bean id="elasticdata-gru.listDemandTypeExternalProvider" class="java.util.ArrayList">
-            <constructor-arg>
-                <list>
-                    <ref bean="elasticdata-gru.demandTypeExternalProvider" />            
-                </list>
-            </constructor-arg>
-        </bean>
 </beans>
