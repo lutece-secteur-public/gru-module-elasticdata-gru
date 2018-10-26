@@ -34,9 +34,9 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
 import fr.paris.lutece.plugins.crmclient.util.CRMException;
+import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import java.io.IOException;
 import java.util.Map;
@@ -45,7 +45,7 @@ import javax.inject.Inject;
 /**
  * Provider for demand types external attributes
  */
-public class DemandTypeProvider implements IDataSourceExternalAttributesProvider<DemandDataSource>
+public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
 {
     @Inject
     DemandTypeService _demandTypeService;
@@ -54,25 +54,34 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
      * {@inheritDoc}
      */
     @Override
-    public void provideAttributes( DemandDataSource dataSource )
+    public void provideAttributes( DataSource dataSource )
     {
-        if ( dataSource instanceof DemandDataSource )
+        try
         {
-            try
+            if ( !dataSource.getDataObjects( ).isEmpty( ) )
             {
-                Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+                Map<String, String> listDemandTypes = _demandTypeService.fetchDemandTypes( );
 
                 for ( Object demandObject : dataSource.getDataObjects( ) )
                 {
-                    BaseDemandObject baseDemandObject = (BaseDemandObject)demandObject;
-                    baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
-                }
+                    if ( demandObject instanceof BaseDemandObject )
+                    {
+                        BaseDemandObject baseDemandObject = (BaseDemandObject)demandObject;
+                        baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
+                    }
+                } 
             }
-            catch( CRMException e )
-            {
-                AppLogService.error( "Unable to get remote demand types " + e.getMessage( ), e );
-            }
-            catch( IOException e )
+        }
+        catch( CRMException e )
+        {
+            AppLogService.error( "Unable to get remote demand types " + e.getMessage( ), e );
+        }
+        catch( IOException e )
+        {
+            AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
+        }
+    }
+
             {
                 AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
             }
