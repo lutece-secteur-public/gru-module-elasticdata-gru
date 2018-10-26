@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
 import fr.paris.lutece.plugins.crmclient.util.CRMException;
+import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
@@ -82,9 +83,28 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void provideAttributes( DataObject dataObject ) 
+    {
+        try
+        {
+            if ( dataObject != null && dataObject instanceof BaseDemandObject )
             {
-                AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
+                BaseDemandObject baseDemandObject = (BaseDemandObject)dataObject;
+                Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+                baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
             }
+        }
+        catch( CRMException e )
+        {
+            AppLogService.error( "Unable to get remote demand types " + e.getMessage( ), e );
+        }
+        catch( IOException e )
+        {
+            AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
         }
     }
 }
