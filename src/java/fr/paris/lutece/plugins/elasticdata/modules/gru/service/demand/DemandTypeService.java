@@ -89,14 +89,24 @@ public class DemandTypeService
      */
     public Map<String,String> getDemandTypes( ) throws CRMException, IOException
     {
-        Instant iNow = Instant.now();
-        Duration between = Duration.between( iNow, _instantLastFetchingDemandType);
-        long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60);
-        
-        if ( between.toMinutes() > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty() )
+        if ( _instantLastFetchingDemandType == null )
         {
-            _mapDemandType = fetchDemandTypes();
+             _mapDemandType = fetchDemandTypes();
         }
+        else
+        {
+            Instant iNow = Instant.now();
+            Duration between = Duration.between( iNow, _instantLastFetchingDemandType);
+            long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60);
+
+            if ( between.toMinutes() > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty() )
+            {
+                _mapDemandType = fetchDemandTypes();
+            }
+            
+            _instantLastFetchingDemandType = Instant.now();
+        }
+        
         return _mapDemandType;
     }
 }
