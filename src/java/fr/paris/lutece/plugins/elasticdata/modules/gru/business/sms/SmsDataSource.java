@@ -67,22 +67,6 @@ public class SmsDataSource extends AbstractDataSource implements DataSource, INo
     }
 
     /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Collection<DataObject> getDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<DataObject>( );
-        NotificationFilter filter = new NotificationFilter( );
-        filter.setHasSmsNotification( true );
-        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
-        {
-            collResult.add( new BaseDemandObject( notifDAO ) );
-        }
-        return collResult;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

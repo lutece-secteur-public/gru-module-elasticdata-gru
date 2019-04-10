@@ -67,21 +67,6 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
     }
 
     /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Collection<DataObject> getDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<DataObject>( );
-        NotificationFilter filter = new NotificationFilter( );
-        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
-        {
-            collResult.add( new BaseDemandObject( notifDAO ) );
-        }
-        return collResult;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
