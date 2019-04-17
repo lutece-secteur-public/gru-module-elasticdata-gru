@@ -128,31 +128,31 @@ public class SmsDataSource extends AbstractDataSource implements DataSource, INo
      * {@inheritDoc}
      */
     @Override
-    public List<String> getIdDataObjects() 
+    public List<String> getIdDataObjects( )
     {
         NotificationFilter filter = new NotificationFilter( );
         filter.setHasSmsNotification( true );
-        return _notificationDAO.loadIdsByFilter(filter );  
+        return _notificationDAO.loadIdsByFilter( filter );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<DataObject> getDataObjects(List<String> listIdDataObjects) 
+    public List<DataObject> getDataObjects( List<String> listIdDataObjects )
     {
-        List<DataObject> listDataObject = new ArrayList<>();
-        //TODO load all in one database call
+        List<DataObject> listDataObject = new ArrayList<>( );
+        // TODO load all in one database call
         for ( String strId : listIdDataObjects )
         {
             listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( strId ) ) );
         }
         return listDataObject;
     }
-    
-      /**
-      * {@inheritDoc}
-      */
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterator<DataObject> getDataObjectsIterator( )
     {

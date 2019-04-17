@@ -64,7 +64,7 @@ public class BaseDemandObject extends AbstractDataObject
     private String _strHourClosure;
     private String _strPrefixedDayOfWeekClosure;
     private String _strPrefixedMonthClosure;
-    private Map<String,String> _mapCustomerIdentityAttributes;
+    private Map<String, String> _mapCustomerIdentityAttributes;
 
     /**
      * Base constructor
@@ -77,13 +77,13 @@ public class BaseDemandObject extends AbstractDataObject
         _strDemandSubtype = DEFAULT_DEMAND_SUBTYPE;
         _strDemandSubtypeId = "";
         _strConnectionId = "";
-        _mapCustomerIdentityAttributes = new HashMap<>();
+        _mapCustomerIdentityAttributes = new HashMap<>( );
         _strDayOfWeekClosure = "";
-        _strMonthClosure="";
-        _strHourClosure="";
-        _strPrefixedDayOfWeekClosure="";
-        _strPrefixedMonthClosure="";
-        _lTimestampClosure=0;
+        _strMonthClosure = "";
+        _strHourClosure = "";
+        _strPrefixedDayOfWeekClosure = "";
+        _strPrefixedMonthClosure = "";
+        _lTimestampClosure = 0;
     }
 
     /**
@@ -103,15 +103,15 @@ public class BaseDemandObject extends AbstractDataObject
             _strConnectionId = demand.getCustomer( ).getId( );
             _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
             setTimestamp( demand.getCreationDate( ) );
-            _lTimestampClosure = demand.getClosureDate();
-            Locale locale = LocaleService.getDefault();
+            _lTimestampClosure = demand.getClosureDate( );
+            Locale locale = LocaleService.getDefault( );
             Calendar calendar = Calendar.getInstance( locale );
             calendar.setTimeInMillis( _lTimestampClosure );
-            _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG , locale );
-            _strPrefixedDayOfWeekClosure = ((( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
-            _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG , locale );
-            _strPrefixedMonthClosure = String.format( "%02d" , calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
-            _strHourClosure = String.format( "%02d" , calendar.get(Calendar.HOUR_OF_DAY ));
+            _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, locale );
+            _strPrefixedDayOfWeekClosure = ( ( ( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
+            _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG, locale );
+            _strPrefixedMonthClosure = String.format( "%02d", calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
+            _strHourClosure = String.format( "%02d", calendar.get( Calendar.HOUR_OF_DAY ) );
         }
     }
 
@@ -134,15 +134,15 @@ public class BaseDemandObject extends AbstractDataObject
                 _strDemandSubtypeId = notification.getDemand( ).getSubtypeId( );
                 _strDemandSubtype = AppPropertiesService.getProperty( PREFIX_DEMAND_SUBTYPE + _strDemandSubtypeId, DEFAULT_DEMAND_SUBTYPE );
                 _strConnectionId = notification.getDemand( ).getCustomer( ).getId( );
-                _lTimestampClosure = notification.getDemand().getClosureDate();
-                Locale locale = LocaleService.getDefault();
+                _lTimestampClosure = notification.getDemand( ).getClosureDate( );
+                Locale locale = LocaleService.getDefault( );
                 Calendar calendar = Calendar.getInstance( locale );
                 calendar.setTimeInMillis( _lTimestampClosure );
-                _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG , locale );
-                _strPrefixedDayOfWeekClosure = ((( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
-                _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG , locale );
-                _strPrefixedMonthClosure = String.format( "%02d" , calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
-                _strHourClosure = String.format( "%02d" , calendar.get(Calendar.HOUR_OF_DAY ));
+                _strDayOfWeekClosure = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, locale );
+                _strPrefixedDayOfWeekClosure = ( ( ( calendar.get( Calendar.DAY_OF_WEEK ) + 5 ) % 7 ) + 1 ) + " - " + _strDayOfWeekClosure;
+                _strMonthClosure = calendar.getDisplayName( Calendar.MONTH, Calendar.LONG, locale );
+                _strPrefixedMonthClosure = String.format( "%02d", calendar.get( Calendar.MONTH ) + 1 ) + " - " + _strMonthClosure;
+                _strHourClosure = String.format( "%02d", calendar.get( Calendar.HOUR_OF_DAY ) );
             }
         }
     }
@@ -222,89 +222,103 @@ public class BaseDemandObject extends AbstractDataObject
 
     /**
      * Get the connection id of the user of the demand
+     * 
      * @return the connection id
      */
-    public String getConnectionId() {
+    public String getConnectionId( )
+    {
         return _strConnectionId;
     }
 
     /**
      * Set the connection id of the user of the demand
-     * @param strConnectionId the connection id
+     * 
+     * @param strConnectionId
+     *            the connection id
      */
-    public void setConnectionId(String strConnectionId)
+    public void setConnectionId( String strConnectionId )
     {
         _strConnectionId = strConnectionId;
     }
 
     /**
      * Get customer identity attributes
+     * 
      * @return the map of customer identity attributes
      */
-    public Map<String, String> getCustomerIdentityAttributes() {
+    public Map<String, String> getCustomerIdentityAttributes( )
+    {
         return _mapCustomerIdentityAttributes;
     }
 
     /**
      * Set the customer identity attributes map
-     * @param mapCustomerIdentityAttributes 
+     * 
+     * @param mapCustomerIdentityAttributes
      */
-    public void setCustomerIdentityAttributes (Map<String, String> mapCustomerIdentityAttributes ) 
+    public void setCustomerIdentityAttributes( Map<String, String> mapCustomerIdentityAttributes )
     {
         _mapCustomerIdentityAttributes = mapCustomerIdentityAttributes;
     }
 
     /**
      * Get the timestamp of the closure of the demand
+     * 
      * @return The timestamp of the closure of the demand
      */
-    public String getTimestampClosure() 
+    public String getTimestampClosure( )
     {
-        return String.valueOf(_lTimestampClosure);
+        return String.valueOf( _lTimestampClosure );
     }
 
     /**
      * Get the day of week of the closure of the demand
+     * 
      * @return the day of week of the closure of the demand
      */
-    public String getDayOfWeekClosure() 
+    public String getDayOfWeekClosure( )
     {
         return _strDayOfWeekClosure;
     }
 
     /**
      * Get the month of the closure of the demand
+     * 
      * @return the month of the closure of the demand
      */
-    public String getMonthClosure() 
+    public String getMonthClosure( )
     {
         return _strMonthClosure;
     }
 
     /**
      * Get the hour of the closure of the demand
+     * 
      * @return the hour of the closure of the demand
      */
-    public String getHourClosure() {
+    public String getHourClosure( )
+    {
         return _strHourClosure;
     }
 
     /**
      * Get the prefixed day of week of the closure of the demand
+     * 
      * @return the prefixed day of week of the closure of the demand
      */
-    public String getPrefixedDayOfWeekClosure() {
+    public String getPrefixedDayOfWeekClosure( )
+    {
         return _strPrefixedDayOfWeekClosure;
     }
 
     /**
      * Get the prefixed month of the closure of the demand
+     * 
      * @return the prefixed month of the closure of the demand
      */
-    public String getPrefixedMonthClosure() {
+    public String getPrefixedMonthClosure( )
+    {
         return _strPrefixedMonthClosure;
     }
-    
-  
 
 }

@@ -67,10 +67,10 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
                 {
                     if ( demandObject instanceof BaseDemandObject )
                     {
-                        BaseDemandObject baseDemandObject = (BaseDemandObject)demandObject;
+                        BaseDemandObject baseDemandObject = (BaseDemandObject) demandObject;
                         baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
                     }
-                } 
+                }
             }
         }
         catch( CRMException e )
@@ -87,13 +87,13 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
      * {@inheritDoc}
      */
     @Override
-    public void provideAttributes( DataObject dataObject ) 
+    public void provideAttributes( DataObject dataObject )
     {
         try
         {
             if ( dataObject != null && dataObject instanceof BaseDemandObject )
             {
-                BaseDemandObject baseDemandObject = (BaseDemandObject)dataObject;
+                BaseDemandObject baseDemandObject = (BaseDemandObject) dataObject;
                 Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
                 baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
             }

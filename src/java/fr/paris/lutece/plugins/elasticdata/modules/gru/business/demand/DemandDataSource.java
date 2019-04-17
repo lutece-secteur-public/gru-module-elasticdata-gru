@@ -56,7 +56,7 @@ import java.util.List;
 public class DemandDataSource extends AbstractDataSource implements IDemandListener
 {
     IDemandDAO _demandDAO;
-    
+
     /**
      * Set the IDemandDAO to use
      * 
@@ -120,29 +120,29 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
      * {@inheritDoc}
      */
     @Override
-    public List<String> getIdDataObjects() 
+    public List<String> getIdDataObjects( )
     {
-        return _demandDAO.loadAllIds();
+        return _demandDAO.loadAllIds( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<DataObject> getDataObjects( List<String> listIdDataObjects ) 
+    public List<DataObject> getDataObjects( List<String> listIdDataObjects )
     {
-        List<DataObject> listDataObject = new ArrayList<>();
-        //TODO load all in one database call
+        List<DataObject> listDataObject = new ArrayList<>( );
+        // TODO load all in one database call
         for ( String strId : listIdDataObjects )
         {
             listDataObject.add( new BaseDemandObject( _demandDAO.loadById( strId ) ) );
         }
         return listDataObject;
     }
-    
-     /**
-      * {@inheritDoc}
-      */
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterator<DataObject> getDataObjectsIterator( )
     {

@@ -53,12 +53,11 @@ import javax.inject.Inject;
 public class DemandTypeService
 {
     private static final String PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE = "elasticdata-gru.demandType.delayForNewFetch";
-    
-    
+
     @Inject
     ICRMClientService _crmClientService;
-    
-    Map<String,String> _mapDemandType;
+
+    Map<String, String> _mapDemandType;
     Instant _instantLastFetchingDemandType;
     ObjectMapper _mapper = new ObjectMapper( );
 
@@ -74,40 +73,41 @@ public class DemandTypeService
         String strResponse = _crmClientService.getCRMDemandTypes( );
         DemandType [ ] tabDemandTypes = _mapper.readValue( strResponse, DemandType [ ].class );
         List<DemandType> listDemandTypes = Arrays.asList( tabDemandTypes );
-        
+
         return listDemandTypes.stream( ).collect(
                 Collectors.toMap( demandType -> Integer.toString( demandType.getIdDemandType( ) ), demandType -> demandType.getLabel( ) ) );
     }
-    
+
     /**
      * Get the demand types map ( stored or fetched )
+     * 
      * @return the map of demand type ( id / label )
      * @throws CRMException
-     *              The CRM exception
-     * @throws IOException 
-     *              The IO exeption
+     *             The CRM exception
+     * @throws IOException
+     *             The IO exeption
      */
-    public Map<String,String> getDemandTypes( ) throws CRMException, IOException
+    public Map<String, String> getDemandTypes( ) throws CRMException, IOException
     {
         if ( _instantLastFetchingDemandType == null )
         {
-             _mapDemandType = fetchDemandTypes();
-             _instantLastFetchingDemandType = Instant.now();
+            _mapDemandType = fetchDemandTypes( );
+            _instantLastFetchingDemandType = Instant.now( );
         }
         else
         {
-            Instant iNow = Instant.now();
-            Duration between = Duration.between( iNow, _instantLastFetchingDemandType);
-            long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60);
+            Instant iNow = Instant.now( );
+            Duration between = Duration.between( iNow, _instantLastFetchingDemandType );
+            long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60 );
 
-            if ( between.toMinutes() > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty() )
+            if ( between.toMinutes( ) > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty( ) )
             {
-                _mapDemandType = fetchDemandTypes();
+                _mapDemandType = fetchDemandTypes( );
             }
-            
-            _instantLastFetchingDemandType = Instant.now();
+
+            _instantLastFetchingDemandType = Instant.now( );
         }
-        
+
         return _mapDemandType;
     }
 }

@@ -52,12 +52,12 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 {
     private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
     private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
-    
+
     @Inject
     DemandTypeService _demandTypeService;
-    @Inject 
+    @Inject
     IdentityService _identityService;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -69,7 +69,7 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
             for ( DataObject dataObject : dataSource.getDataObjects( ) )
             {
                 provideAttributes( dataObject );
-            } 
+            }
         }
     }
 
@@ -77,7 +77,7 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
      * {@inheritDoc}
      */
     @Override
-    public void provideAttributes( DataObject dataObject ) 
+    public void provideAttributes( DataObject dataObject )
     {
         if ( dataObject != null && dataObject instanceof BaseDemandObject )
         {
@@ -85,31 +85,32 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
             provideIdentityAttributes( demandDataObject );
         }
     }
-    
+
     /**
      * Provide attributes from identitystore in a dataObject
-     * @param dataObject 
-     *              The data Object
+     * 
+     * @param dataObject
+     *            The data Object
      */
     private void provideIdentityAttributes( BaseDemandObject dataObject )
     {
-        String strConnectionId = dataObject.getConnectionId();
+        String strConnectionId = dataObject.getConnectionId( );
         if ( !strConnectionId.isEmpty( ) )
         {
             IdentityDto identity = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_APPLICATION_CODE );
             List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
-            Map<String,String> mapIdentityAttribute = new HashMap<>();
+            Map<String, String> mapIdentityAttribute = new HashMap<>( );
 
             for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
             {
-                String strIdentityAttributeCode = AppPropertiesService.getProperty(strIdentityAttributeCodeKey);
-                if ( identity.getAttributes().keySet().contains( strIdentityAttributeCode ) )
+                String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
+                if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
                 {
-                    mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes().get( strIdentityAttributeCode ).getValue( ) );
+                    mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
                 }
             }
             dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
         }
-        
+
     }
 }
