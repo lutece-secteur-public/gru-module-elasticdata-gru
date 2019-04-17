@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
+import fr.paris.lutece.plugins.elasticdata.business.BatchDataObjectsIterator;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
@@ -48,6 +49,8 @@ import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
 import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
 import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * EmailDataSource
@@ -105,6 +108,9 @@ public class EmailDataSource extends AbstractDataSource implements DataSource, I
         AppLogService.info( "EmailDataSource doesn't manage onDeleteDemand method" );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<DataObject> fetchDataObjects( )
     {
@@ -116,6 +122,42 @@ public class EmailDataSource extends AbstractDataSource implements DataSource, I
             collResult.add( new BaseDemandObject( notifDAO ) );
         }
         return collResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getIdDataObjects() 
+    {
+        NotificationFilter filter = new NotificationFilter( );
+        filter.setHasCustomerEmailNotification( true );
+        
+        return _notificationDAO.loadIdsByFilter ( filter );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<DataObject> getDataObjects( List<String> listIdDataObjects ) 
+    {
+        List<DataObject> listDataObject = new ArrayList<>();
+        //TODO load all in one database call
+        for ( String strId : listIdDataObjects )
+        {
+            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( strId ) ) );
+        }
+        return listDataObject;
+    }
+    
+     /**
+      * {@inheritDoc}
+      */
+    @Override
+    public Iterator<DataObject> getDataObjectsIterator( )
+    {
+        return new BatchDataObjectsIterator( this );
     }
 
 }

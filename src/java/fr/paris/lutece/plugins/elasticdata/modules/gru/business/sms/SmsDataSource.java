@@ -35,6 +35,7 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
+import fr.paris.lutece.plugins.elasticdata.business.BatchDataObjectsIterator;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
@@ -48,6 +49,8 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * DemandDataSource
@@ -119,5 +122,40 @@ public class SmsDataSource extends AbstractDataSource implements DataSource, INo
             collResult.add( new BaseDemandObject( notifDAO ) );
         }
         return collResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getIdDataObjects() 
+    {
+        NotificationFilter filter = new NotificationFilter( );
+        filter.setHasSmsNotification( true );
+        return _notificationDAO.loadIdsByFilter(filter );  
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<DataObject> getDataObjects(List<String> listIdDataObjects) 
+    {
+        List<DataObject> listDataObject = new ArrayList<>();
+        //TODO load all in one database call
+        for ( String strId : listIdDataObjects )
+        {
+            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( strId ) ) );
+        }
+        return listDataObject;
+    }
+    
+      /**
+      * {@inheritDoc}
+      */
+    @Override
+    public Iterator<DataObject> getDataObjectsIterator( )
+    {
+        return new BatchDataObjectsIterator( this );
     }
 }

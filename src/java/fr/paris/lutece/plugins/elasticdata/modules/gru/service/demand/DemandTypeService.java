@@ -92,6 +92,7 @@ public class DemandTypeService
         if ( _instantLastFetchingDemandType == null )
         {
              _mapDemandType = fetchDemandTypes();
+             _instantLastFetchingDemandType = Instant.now();
         }
         else
         {

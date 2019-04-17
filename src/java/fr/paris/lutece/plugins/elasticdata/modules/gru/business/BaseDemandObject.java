@@ -97,6 +97,7 @@ public class BaseDemandObject extends AbstractDataObject
         super( );
         if ( demand != null )
         {
+            setId( String.valueOf( demand.getDemandId( ) ) );
             _strDemandTypeId = demand.getTypeId( );
             _strDemandSubtypeId = demand.getSubtypeId( );
             _strConnectionId = demand.getCustomer( ).getId( );
@@ -125,6 +126,7 @@ public class BaseDemandObject extends AbstractDataObject
         super( );
         if ( notification != null )
         {
+            setId( String.valueOf( notification.getId( ) ) );
             setTimestamp( notification.getDate( ) );
             if ( notification.getDemand( ) != null )
             {
@@ -303,6 +305,6 @@ public class BaseDemandObject extends AbstractDataObject
         return _strPrefixedMonthClosure;
     }
     
-    
+  
 
 }
