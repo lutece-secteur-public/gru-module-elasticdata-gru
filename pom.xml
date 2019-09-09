@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-elasticdata-gru</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <name>Lutece elasticdata gru module</name>
 
     <repositories>
@@ -76,7 +76,7 @@
         <connection>scm:git:https://github.com/lutece-secteur-public/gru-module-elasticdata-gru.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-secteur-public/gru-module-elasticdata-gru.git</developerConnection>
         <url>https://github.com/lutece-secteur-public/gru-module-elasticdata-gru.git</url>
-      <tag>HEAD</tag>
+      <tag>module-elasticdata-gru-1.0.4</tag>
   </scm> 
         
 </project>
