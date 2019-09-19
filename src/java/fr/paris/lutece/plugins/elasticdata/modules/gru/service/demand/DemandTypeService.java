@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.paris.lutece.plugins.crmclient.service.ICRMClientService;
 import fr.paris.lutece.plugins.crmclient.util.CRMException;
@@ -71,6 +72,8 @@ public class DemandTypeService
     public Map<String, String> fetchDemandTypes( ) throws CRMException, IOException
     {
         String strResponse = _crmClientService.getCRMDemandTypes( );
+
+        _mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // ignore fields that do not correspond to demandType
         DemandType [ ] tabDemandTypes = _mapper.readValue( strResponse, DemandType [ ].class );
         List<DemandType> listDemandTypes = Arrays.asList( tabDemandTypes );
 
