@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Provider for demand types external attributes
  */
@@ -95,21 +97,25 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
     private void provideIdentityAttributes( BaseDemandObject dataObject )
     {
         String strConnectionId = dataObject.getConnectionId( );
-        if ( !strConnectionId.isEmpty( ) )
+        if ( !StringUtils.isBlank( strConnectionId ) )
         {
             IdentityDto identity = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_APPLICATION_CODE );
-            List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
-            Map<String, String> mapIdentityAttribute = new HashMap<>( );
 
-            for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
+            if (identity != null )
             {
-                String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
-                if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
-                {
-                    mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
-                }
+	            List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
+	            Map<String, String> mapIdentityAttribute = new HashMap<>( );
+
+	            for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
+	            {
+	                String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
+	                if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
+	                {
+	                    mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
+	                }
+	            }
+	            dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
             }
-            dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
         }
 
     }
