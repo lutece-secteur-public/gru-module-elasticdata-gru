@@ -100,7 +100,7 @@ public class DemandTypeService
         else
         {
             Instant iNow = Instant.now( );
-            Duration between = Duration.between( iNow, _instantLastFetchingDemandType );
+            Duration between = Duration.between( _instantLastFetchingDemandType, iNow );
             long nMinBeforeFetchingAgain = AppPropertiesService.getPropertyLong( PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE, 60 );
 
             if ( between.toMinutes( ) > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty( ) )
