@@ -35,7 +35,6 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
-import fr.paris.lutece.plugins.elasticdata.business.BatchDataObjectsIterator;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
@@ -46,8 +45,6 @@ import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -102,19 +99,6 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
         AppLogService.info( "DemandDataSource doesn't manage onDeleteDemand method" );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection fetchDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<>( );
-        for ( Demand demandDAO : _demandDAO.loadAllDemands( ) )
-        {
-            collResult.add( new BaseDemandObject( demandDAO ) );
-        }
-        return collResult;
-    }
 
     /**
      * {@inheritDoc}
@@ -138,15 +122,6 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
             listDataObject.add( new BaseDemandObject( _demandDAO.loadById( strId ) ) );
         }
         return listDataObject;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<DataObject> getDataObjectsIterator( )
-    {
-        return new BatchDataObjectsIterator( this );
     }
 
 }

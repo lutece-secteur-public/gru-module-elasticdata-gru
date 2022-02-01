@@ -35,7 +35,6 @@
            <property name="id" value="DemandDataSource" />
            <property name="name" value="Base des demandes de la GRU" />
            <property name="targetIndexName" value="demands" />
-           <property name="dataType" value="demand" />
            <property name="demandDAO" ref="elasticdata-gru.demandDAO" />
            <property name="externalAttributesProvider">
     		<list value-type="fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider">
@@ -49,7 +48,6 @@
            <property name="id" value="NotificationDataSource" />
            <property name="name" value="Base des notifications de la GRU" />
            <property name="targetIndexName" value="notifications" />
-           <property name="dataType" value="notification" />
            <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
        
@@ -57,7 +55,6 @@
            <property name="id" value="EmailDataSource" />
            <property name="name" value="Base des emails envoyés dans la cadre de la GRU" />
            <property name="targetIndexName" value="emails" />
-           <property name="dataType" value="email" />
            <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
 
@@ -65,7 +62,6 @@
            <property name="id" value="SMSDataSource" />
            <property name="name" value="Base des SMS envoyés dans la cadre de la GRU" />
            <property name="targetIndexName" value="sms" />
-           <property name="dataType" value="sms" />
            <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
        

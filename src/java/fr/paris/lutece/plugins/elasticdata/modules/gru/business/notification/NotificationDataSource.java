@@ -35,9 +35,7 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
-import fr.paris.lutece.plugins.elasticdata.business.BatchDataObjectsIterator;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
@@ -48,14 +46,12 @@ import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * NotificationDataSource
  */
-public class NotificationDataSource extends AbstractDataSource implements DataSource, INotificationListener
+public class NotificationDataSource extends AbstractDataSource implements INotificationListener
 {
     INotificationDAO _notificationDAO;
 
@@ -108,20 +104,6 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
         AppLogService.info( "NotificationDataSource doesn't manage onDeleteDemand method" );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<DataObject> fetchDataObjects( )
-    {
-        Collection<DataObject> collResult = new ArrayList<>( );
-        NotificationFilter filter = new NotificationFilter( );
-        for ( Notification notifDAO : _notificationDAO.loadByFilter( filter ) )
-        {
-            collResult.add( new BaseDemandObject( notifDAO ) );
-        }
-        return collResult;
-    }
 
     @Override
     public List<String> getIdDataObjects( )
@@ -142,12 +124,4 @@ public class NotificationDataSource extends AbstractDataSource implements DataSo
         return listDataObject;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<DataObject> getDataObjectsIterator( )
-    {
-        return new BatchDataObjectsIterator( this );
-    }
 }
