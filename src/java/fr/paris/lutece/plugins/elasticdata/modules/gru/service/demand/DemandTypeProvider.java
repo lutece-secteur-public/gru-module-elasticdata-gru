@@ -35,11 +35,11 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
 import fr.paris.lutece.plugins.crmclient.util.CRMException;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
@@ -55,22 +55,15 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
      * {@inheritDoc}
      */
     @Override
-    public void provideAttributes( DataSource dataSource )
+    public void provideAttributes( DataObject dataObject )
     {
         try
         {
-            if ( !dataSource.getDataObjects( ).isEmpty( ) )
+            if ( dataObject != null && dataObject instanceof BaseDemandObject )
             {
-                Map<String, String> listDemandTypes = _demandTypeService.fetchDemandTypes( );
-
-                for ( Object demandObject : dataSource.getDataObjects( ) )
-                {
-                    if ( demandObject instanceof BaseDemandObject )
-                    {
-                        BaseDemandObject baseDemandObject = (BaseDemandObject) demandObject;
-                        baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
-                    }
-                }
+                BaseDemandObject baseDemandObject = (BaseDemandObject) dataObject;
+                Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+                baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
             }
         }
         catch( CRMException e )
@@ -83,19 +76,18 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void provideAttributes( DataObject dataObject )
-    {
+    public void provideAttributes(List<DataObject> listDataObject) {
         try
         {
-            if ( dataObject != null && dataObject instanceof BaseDemandObject )
+            Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+            for( DataObject demandObject : listDataObject ) 
             {
-                BaseDemandObject baseDemandObject = (BaseDemandObject) dataObject;
-                Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
-                baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
+                if ( demandObject instanceof BaseDemandObject )
+                {
+                    BaseDemandObject baseDemandObject = ( BaseDemandObject ) demandObject;
+                    baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
+                }
             }
         }
         catch( CRMException e )

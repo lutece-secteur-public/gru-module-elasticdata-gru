@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.business.DataSource;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.identitystore.v1.web.rs.dto.IdentityDto;
@@ -59,22 +58,16 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
     DemandTypeService _demandTypeService;
     @Inject
     IdentityService _identityService;
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public void provideAttributes( DataSource dataSource )
-    {
-        if ( !dataSource.getDataObjects( ).isEmpty( ) )
-        {
-            for ( DataObject dataObject : dataSource.getDataObjects( ) )
-            {
-                provideAttributes( dataObject );
-            }
-        }
+    public void provideAttributes( List<DataObject> listDataObject ) {
+        for( DataObject dataObject : listDataObject ) {
+            provideAttributes( dataObject );
+        }        
     }
-
     /**
      * {@inheritDoc}
      */
