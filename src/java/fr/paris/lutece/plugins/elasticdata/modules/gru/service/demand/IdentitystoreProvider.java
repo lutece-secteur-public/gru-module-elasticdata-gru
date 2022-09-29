@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttribute
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.identitystore.v1.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.v1.web.service.IdentityService;
+import fr.paris.lutece.plugins.identitystore.web.exception.IdentityStoreException;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.util.HashMap;
 import java.util.List;
@@ -51,65 +52,72 @@ import org.apache.commons.lang.StringUtils;
  */
 public class IdentitystoreProvider implements IDataSourceExternalAttributesProvider
 {
-    private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
-    private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
+	private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
+	private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
 
-    @Inject
-    DemandTypeService _demandTypeService;
-    @Inject
-    IdentityService _identityService;
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void provideAttributes( List<DataObject> listDataObject ) {
-        for( DataObject dataObject : listDataObject ) {
-            provideAttributes( dataObject );
-        }        
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void provideAttributes( DataObject dataObject )
-    {
-        if ( dataObject != null && dataObject instanceof BaseDemandObject )
-        {
-            BaseDemandObject demandDataObject = (BaseDemandObject) dataObject;
-            provideIdentityAttributes( demandDataObject );
-        }
-    }
+	@Inject
+	DemandTypeService _demandTypeService;
+	@Inject
+	IdentityService _identityService;
 
-    /**
-     * Provide attributes from identitystore in a dataObject
-     * 
-     * @param dataObject
-     *            The data Object
-     */
-    private void provideIdentityAttributes( BaseDemandObject dataObject )
-    {
-        String strConnectionId = dataObject.getConnectionId( );
-        if ( !StringUtils.isBlank( strConnectionId ) )
-        {
-            IdentityDto identity = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_APPLICATION_CODE );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void provideAttributes( List<DataObject> listDataObject ) 
+	{
+		for( DataObject dataObject : listDataObject ) {
+			provideAttributes( dataObject );
+		}        
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void provideAttributes( DataObject dataObject )
+	{
+		if ( dataObject != null && dataObject instanceof BaseDemandObject )
+		{
+			BaseDemandObject demandDataObject = (BaseDemandObject) dataObject;
+			provideIdentityAttributes( demandDataObject );
+		}
+	}
 
-            if (identity != null )
-            {
-	            List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
-	            Map<String, String> mapIdentityAttribute = new HashMap<>( );
-
-	            for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
-	            {
-	                String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
-	                if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
-	                {
-	                    mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
-	                }
-	            }
-	            dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
-            }
-        }
-
-    }
+	/**
+	 * Provide attributes from identitystore in a dataObject
+	 * 
+	 * @param dataObject
+	 *            The data Object
+	 */
+	private void provideIdentityAttributes( BaseDemandObject dataObject )
+	{
+		String strConnectionId = dataObject.getConnectionId( );
+		if ( !StringUtils.isBlank( strConnectionId ) )
+		{
+			try 
+			{
+				IdentityDto identity = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_APPLICATION_CODE );
+				
+				if (identity != null )
+				{
+					List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
+					Map<String, String> mapIdentityAttribute = new HashMap<>( );
+				
+					for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
+					{
+						String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
+						if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
+						{
+							mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
+						}
+					}
+					dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
+				}
+			}
+			catch ( IdentityStoreException e)
+			{
+				// do nothing
+			}
+		}
+	}
 }

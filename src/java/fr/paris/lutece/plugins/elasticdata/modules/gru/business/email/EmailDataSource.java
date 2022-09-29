@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFil
 import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * EmailDataSource
@@ -114,7 +115,10 @@ public class EmailDataSource extends AbstractDataSource implements INotification
         NotificationFilter filter = new NotificationFilter( );
         filter.setHasCustomerEmailNotification( true );
 
-        return _notificationDAO.loadIdsByFilter( filter );
+        List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
+        
+        return listIds.stream().map(Object::toString)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -127,7 +131,7 @@ public class EmailDataSource extends AbstractDataSource implements INotification
         // TODO load all in one database call
         for ( String strId : listIdDataObjects )
         {
-            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( strId ) ) );
+            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( Integer.parseInt( strId ) ).get( ) ) );
         }
         return listDataObject;
     }

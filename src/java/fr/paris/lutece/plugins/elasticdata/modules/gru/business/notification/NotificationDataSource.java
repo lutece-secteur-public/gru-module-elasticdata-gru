@@ -47,6 +47,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * NotificationDataSource
@@ -109,7 +110,11 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
     public List<String> getIdDataObjects( )
     {
         NotificationFilter filter = new NotificationFilter( );
-        return _notificationDAO.loadIdsByFilter( filter );
+        
+        List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
+        
+        return listIds.stream().map(Object::toString)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -119,7 +124,7 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
         // TODO load all in one database call
         for ( String strId : listIdDataObjects )
         {
-            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( strId ) ) );
+            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( Integer.parseInt(strId) ).get( ) ) );
         }
         return listDataObject;
     }
