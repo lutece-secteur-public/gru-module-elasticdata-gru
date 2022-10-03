@@ -47,6 +47,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -121,12 +122,20 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
     public List<DataObject> getDataObjects( List<String> listIdDataObjects )
     {
         List<DataObject> listDataObject = new ArrayList<>( );
-        // TODO load all in one database call
+
         for ( String strId : listIdDataObjects )
         {
-            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( Integer.parseInt(strId) ).get( ) ) );
+            Optional<Notification> notif = _notificationDAO.loadById( Integer.parseInt( strId ) );
+            if ( notif.isPresent( ) )
+            {
+                listDataObject.add( new BaseDemandObject( notif.get( ) ) );
+            }
+            else
+            {
+                AppLogService.error( "Error in indexing process : notification empty for id {}", strId );
+            }
         }
         return listDataObject;
     }
-
 }
+
