@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject
 import fr.paris.lutece.plugins.identitystore.v1.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.v1.web.service.IdentityService;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityStoreException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.util.HashMap;
 import java.util.List;
@@ -114,9 +115,9 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 					dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
 				}
 			}
-			catch ( IdentityStoreException e)
+			catch ( Exception e )
 			{
-				// do nothing
+				AppLogService.error( "Identity store access error for Id {}", strConnectionId  ) ;
 			}
 		}
 	}
