@@ -39,12 +39,10 @@ import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.IndexerAction;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceIncrementalService;
-import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
 import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
-import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
