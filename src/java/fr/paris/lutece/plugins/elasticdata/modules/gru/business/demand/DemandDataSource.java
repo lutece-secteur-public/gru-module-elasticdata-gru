@@ -36,12 +36,12 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
+import fr.paris.lutece.plugins.elasticdata.business.IndexerAction;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.elasticdata.service.DataSourceIncrementalService;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandDAO;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandListener;
-import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
@@ -70,15 +70,7 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
     @Override
     public void onCreateDemand( Demand demand )
     {
-        BaseDemandObject demandObj = new BaseDemandObject( demand );
-        try
-        {
-            DataSourceService.processIncrementalIndexing( this, demandObj );
-        }
-        catch( ElasticClientException e )
-        {
-            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for demand [" + demand.getId( ) + "]", e );
-        }
+        DataSourceIncrementalService.addTask( this.getId(), String.valueOf( demand.getDemandId( ) ), IndexerAction.TASK_CREATE );
     }
 
     /**

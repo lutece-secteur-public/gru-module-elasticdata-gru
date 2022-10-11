@@ -36,7 +36,9 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification;
 
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
+import fr.paris.lutece.plugins.elasticdata.business.IndexerAction;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.service.DataSourceIncrementalService;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
@@ -78,14 +80,7 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
             return;
         }
         BaseDemandObject notificationObj = new BaseDemandObject( notification );
-        try
-        {
-            DataSourceService.processIncrementalIndexing( this, notificationObj );
-        }
-        catch( ElasticClientException e )
-        {
-            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for notification [" + notification.getId( ) + "]", e );
-        }
+        DataSourceIncrementalService.addTask( this.getId( ), String.valueOf( notificationObj.getId( ) ), IndexerAction.TASK_CREATE );    
     }
 
     /**
