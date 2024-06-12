@@ -33,20 +33,16 @@
  */
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.paris.lutece.plugins.crmclient.service.ICRMClientService;
-import fr.paris.lutece.plugins.crmclient.util.CRMException;
-import fr.paris.lutece.plugins.grubusiness.business.demand.DemandType;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
+
+import fr.paris.lutece.plugins.grubusiness.business.demand.DemandType;
+import fr.paris.lutece.plugins.grubusiness.service.notification.NotificationException;
+import fr.paris.lutece.plugins.notificationstore.v1.web.service.NotificationStoreService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * The demand type service
@@ -55,30 +51,20 @@ public class DemandTypeService
 {
     private static final String PROPERTY_NB_MINUTES_BEFORE_FETCHING_DEMANDTYPE = "elasticdata-gru.demandType.delayForNewFetch";
 
-    @Inject
-    ICRMClientService _crmClientService;
+    NotificationStoreService _notificationStoreService;
 
     Map<String, String> _mapDemandType;
     Instant _instantLastFetchingDemandType;
-    ObjectMapper _mapper = new ObjectMapper( );
 
     /**
-     * Get a the remote demand types as Map of String,String
+     * constructor
      * 
-     * @return a map of key:demandTypeId, value:demandTypeLabel
-     * @throws CRMException
-     * @throws IOException
+     * @param notificationStoreService
      */
-    public Map<String, String> fetchDemandTypes( ) throws CRMException, IOException
+    public DemandTypeService( NotificationStoreService notificationStoreService )
     {
-        String strResponse = _crmClientService.getCRMDemandTypes( );
-
-        _mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // ignore fields that do not correspond to demandType
-        DemandType [ ] tabDemandTypes = _mapper.readValue( strResponse, DemandType [ ].class );
-        List<DemandType> listDemandTypes = Arrays.asList( tabDemandTypes );
-
-        return listDemandTypes.stream( ).collect(
-                Collectors.toMap( demandType -> Integer.toString( demandType.getIdDemandType( ) ), demandType -> demandType.getLabel( ) ) );
+        super( );
+        this._notificationStoreService = notificationStoreService;
     }
 
     /**
@@ -89,12 +75,14 @@ public class DemandTypeService
      *             The CRM exception
      * @throws IOException
      *             The IO exeption
+     * @throws NotificationException
      */
-    public Map<String, String> getDemandTypes( ) throws CRMException, IOException
+    public Map<String, String> getDemandTypes( ) throws IOException, NotificationException
     {
         if ( _instantLastFetchingDemandType == null )
         {
-            _mapDemandType = fetchDemandTypes( );
+            _mapDemandType = _notificationStoreService.getDemandTypes( ).stream( )
+                    .collect( Collectors.toMap( d -> String.valueOf( d.getIdDemandType( ) ), DemandType::getLabel, ( a, b ) -> a ) );
             _instantLastFetchingDemandType = Instant.now( );
         }
         else
@@ -105,7 +93,8 @@ public class DemandTypeService
 
             if ( between.toMinutes( ) > nMinBeforeFetchingAgain || _mapDemandType == null || _mapDemandType.isEmpty( ) )
             {
-                _mapDemandType = fetchDemandTypes( );
+                _mapDemandType = _notificationStoreService.getDemandTypes( ).stream( )
+                        .collect( Collectors.toMap( d -> String.valueOf( d.getIdDemandType( ) ), DemandType::getLabel, ( a, b ) -> a ) );
             }
 
             _instantLastFetchingDemandType = Instant.now( );

@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.grubusiness.business.notification.EnumNotificationType;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
@@ -58,7 +59,7 @@ public class SmsDataSource extends AbstractDataSource implements INotificationLi
 
     /**
      * Set the INotificationDAO to use
-     * 
+     *
      * @param notificationDAO
      */
     public void setNotificationDAO( INotificationDAO notificationDAO )
@@ -105,8 +106,6 @@ public class SmsDataSource extends AbstractDataSource implements INotificationLi
         AppLogService.info( "SmsDataSource doesn't manage onDeleteDemand method" );
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -114,10 +113,16 @@ public class SmsDataSource extends AbstractDataSource implements INotificationLi
     public List<String> getIdDataObjects( )
     {
         NotificationFilter filter = new NotificationFilter( );
-        filter.setHasSmsNotification( true );
-        
-        List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
-        
+        if ( !filter.containsSmsNotificationType( ) )
+        {
+        	filter.getListNotificationType( ).add( EnumNotificationType.SMS );
+        }
+
+
+        // TODO : replace this deprecated method
+        //filter.setHasSmsNotification( true );
+        List<Integer> listIds = new ArrayList<>( );  // = _notificationDAO.loadIdsByFilter( filter );
+
         return listIds.stream().map(Object::toString)
                 .collect(Collectors.toList());
     }

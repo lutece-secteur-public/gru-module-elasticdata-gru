@@ -40,6 +40,7 @@ import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
+import fr.paris.lutece.plugins.grubusiness.business.notification.EnumNotificationType;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
@@ -58,7 +59,7 @@ public class EmailDataSource extends AbstractDataSource implements INotification
 
     /**
      * Set the INotificationDAO to use
-     * 
+     *
      * @param notificationDAO
      */
     public void setNotificationDAO( INotificationDAO notificationDAO )
@@ -105,7 +106,6 @@ public class EmailDataSource extends AbstractDataSource implements INotification
         AppLogService.info( "EmailDataSource doesn't manage onDeleteDemand method" );
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -113,10 +113,16 @@ public class EmailDataSource extends AbstractDataSource implements INotification
     public List<String> getIdDataObjects( )
     {
         NotificationFilter filter = new NotificationFilter( );
-        filter.setHasCustomerEmailNotification( true );
+        if ( !filter.containsCustomerEmailNotificationType( ) )
+        {
+        	filter.getListNotificationType( ).add( EnumNotificationType.CUSTOMER_EMAIL );
+        }
 
-        List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
-        
+
+        // TODO : replace this deprecated method
+        // filter.setHasCustomerEmailNotification( true );
+        List<Integer> listIds = new ArrayList<>(); // _notificationDAO.loadIdsByFilter( filter );
+
         return listIds.stream().map(Object::toString)
                 .collect(Collectors.toList());
     }
@@ -135,6 +141,5 @@ public class EmailDataSource extends AbstractDataSource implements INotification
         }
         return listDataObject;
     }
-
 
 }

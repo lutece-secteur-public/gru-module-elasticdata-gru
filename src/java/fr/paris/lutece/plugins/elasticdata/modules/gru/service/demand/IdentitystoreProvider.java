@@ -36,8 +36,11 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.plugins.identitystore.v1.web.rs.dto.IdentityDto;
-import fr.paris.lutece.plugins.identitystore.v1.web.service.IdentityService;
+import fr.paris.lutece.plugins.identitystore.v2.web.rs.AuthorType;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.IdentityDto;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.RequestAuthor;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.IdentitySearchResponse;
+import fr.paris.lutece.plugins.identitystore.v3.web.service.IdentityService;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityStoreException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -46,47 +49,37 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Provider for demand types external attributes
  */
 public class IdentitystoreProvider implements IDataSourceExternalAttributesProvider
 {
-	private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
-	private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
+    private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
+    private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
 
-	@Inject
-	DemandTypeService _demandTypeService;
-	@Inject
-	IdentityService _identityService;
+    @Inject
+    DemandTypeService _demandTypeService;
+    @Inject
+    IdentityService _identityService;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void provideAttributes( List<DataObject> listDataObject ) 
-	{
-		for( DataObject dataObject : listDataObject ) {
-			provideAttributes( dataObject );
-		}        
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void provideAttributes( DataObject dataObject )
-	{
-		if ( dataObject != null && dataObject instanceof BaseDemandObject )
-		{
-			BaseDemandObject demandDataObject = (BaseDemandObject) dataObject;
-			provideIdentityAttributes( demandDataObject );
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void provideAttributes( List<DataObject> listDataObject )
+    {
+        for ( DataObject dataObject : listDataObject )
+        {
+            provideAttributes( dataObject );
+        }
+    }
+
 
 	/**
 	 * Provide attributes from identitystore in a dataObject
-	 * 
+	 *
 	 * @param dataObject
 	 *            The data Object
 	 */
@@ -95,21 +88,23 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 		String strConnectionId = dataObject.getConnectionId( );
 		if ( !StringUtils.isBlank( strConnectionId ) )
 		{
-			try 
+			try
 			{
-				IdentityDto identity = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_APPLICATION_CODE );
-				
-				if (identity != null )
+				IdentitySearchResponse response = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_CLIENT_CODE, requestAutor );
+
+				if ( !response.getIdentities().isEmpty( ) )
 				{
+					IdentityDto identity = response.getIdentities().get(0);
+
 					List<String> listIdentityAttributesCodeKeys = AppPropertiesService.getKeys( PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY );
 					Map<String, String> mapIdentityAttribute = new HashMap<>( );
-				
+
 					for ( String strIdentityAttributeCodeKey : listIdentityAttributesCodeKeys )
 					{
 						String strIdentityAttributeCode = AppPropertiesService.getProperty( strIdentityAttributeCodeKey );
-						if ( identity.getAttributes( ).keySet( ).contains( strIdentityAttributeCode ) )
+						if ( identity.getAttributes( ).stream( ).anyMatch( attr -> attr.getKey().equals( strIdentityAttributeCode ) ) )
 						{
-							mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).get( strIdentityAttributeCode ).getValue( ) );
+							mapIdentityAttribute.put( strIdentityAttributeCode, identity.getAttributes( ).stream( ).filter( attr -> attr.getKey().equals( strIdentityAttributeCode ) ).findAny().orElse(null).getKey( ) );
 						}
 					}
 					dataObject.setCustomerIdentityAttributes( mapIdentityAttribute );
@@ -121,4 +116,5 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 			}
 		}
 	}
+s
 }

@@ -78,7 +78,7 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
             return;
         }
         BaseDemandObject notificationObj = new BaseDemandObject( notification );
-        DataSourceIncrementalService.addTask( this.getId( ), String.valueOf( notificationObj.getId( ) ), IndexerAction.TASK_CREATE );    
+        DataSourceIncrementalService.addTask( this.getId( ), String.valueOf( notificationObj.getId( ) ), IndexerAction.TASK_CREATE );
     }
 
     /**
@@ -99,16 +99,14 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
         AppLogService.info( "NotificationDataSource doesn't manage onDeleteDemand method" );
     }
 
-
     @Override
     public List<String> getIdDataObjects( )
     {
         NotificationFilter filter = new NotificationFilter( );
-        
+
         List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
-        
-        return listIds.stream().map(Object::toString)
-                .collect(Collectors.toList());
+
+        return listIds.stream( ).map( Object::toString ).collect( Collectors.toList( ) );
     }
 
     @Override
@@ -131,4 +129,3 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
         return listDataObject;
     }
 }
-

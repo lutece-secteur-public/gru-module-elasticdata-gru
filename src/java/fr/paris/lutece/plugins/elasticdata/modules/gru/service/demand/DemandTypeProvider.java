@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 
-import fr.paris.lutece.plugins.crmclient.util.CRMException;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.grubusiness.service.notification.NotificationException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import java.io.IOException;
 import java.util.List;
@@ -57,46 +57,42 @@ public class DemandTypeProvider implements IDataSourceExternalAttributesProvider
     @Override
     public void provideAttributes( DataObject dataObject )
     {
-        try
+        if ( dataObject != null && dataObject instanceof BaseDemandObject )
         {
-            if ( dataObject != null && dataObject instanceof BaseDemandObject )
+            BaseDemandObject baseDemandObject = (BaseDemandObject) dataObject;
+            Map<String, String> listDemandTypes;
+            try
             {
-                BaseDemandObject baseDemandObject = (BaseDemandObject) dataObject;
-                Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
+                listDemandTypes = _demandTypeService.getDemandTypes( );
                 baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
             }
+            catch( IOException | NotificationException e )
+            {
+                AppLogService.error( e );
+            }
+
         }
-        catch( CRMException e )
-        {
-            AppLogService.error( "Unable to get remote demand types " + e.getMessage( ), e );
-        }
-        catch( IOException e )
-        {
-            AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
-        }
+
     }
 
     @Override
-    public void provideAttributes(List<DataObject> listDataObject) {
+    public void provideAttributes( List<DataObject> listDataObject )
+    {
         try
         {
             Map<String, String> listDemandTypes = _demandTypeService.getDemandTypes( );
-            for( DataObject demandObject : listDataObject ) 
+            for ( DataObject demandObject : listDataObject )
             {
                 if ( demandObject instanceof BaseDemandObject )
                 {
-                    BaseDemandObject baseDemandObject = ( BaseDemandObject ) demandObject;
+                    BaseDemandObject baseDemandObject = (BaseDemandObject) demandObject;
                     baseDemandObject.setDemandType( listDemandTypes.get( baseDemandObject.getDemandTypeId( ) ) );
                 }
             }
         }
-        catch( CRMException e )
+        catch( NotificationException | IOException e )
         {
-            AppLogService.error( "Unable to get remote demand types " + e.getMessage( ), e );
-        }
-        catch( IOException e )
-        {
-            AppLogService.error( "Unable to parse DemandTypes json " + e.getMessage( ), e );
+            AppLogService.error( e );
         }
     }
 }

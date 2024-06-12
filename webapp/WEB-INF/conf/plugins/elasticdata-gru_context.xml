@@ -10,8 +10,8 @@
         
         <!-- Mock DAO configuration -->
         
-            <bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockDemandDAO" />
-            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockNotificationDAO" />
+            <!-- bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockDemandDAO" />
+            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockNotificationDAO" / -->
 
         <!-- GruSupply DAO configuration -->
             <!--
@@ -19,13 +19,29 @@
             <alias name="grusupply.notificationDAO" alias="elasticdata-gru.notificationDAO" />
             -->    
         <!-- GruStorageDB DAO Configuration -->    
-            <!--
             <bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grustoragedb.business.DemandDAO" />
             <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grustoragedb.business.NotificationDAO" />
-            -->
         <!-- ######################  End of DAO Configuration  ############### -->
        
-       <bean id="elasticdata-gru.demandTypeService" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService"/>
+       <!-- IHttpTransportProvider declarations -->
+		<bean id="notificationStore.httpAccessTransport" class="fr.paris.lutece.plugins.notificationstore.v1.web.rs.service.HttpAccessTransport" >
+			    <property name="ApiEndPointUrl">
+		        <value>${elasticdata-gru.notificationStore.ApiEndPointUrl}</value>
+		    </property>
+		 </bean>
+		
+		<bean id="notificationStore.restTransport.httpAccess" class="fr.paris.lutece.plugins.notificationstore.v3.web.rs.service.NotificationStoreTransportRest">
+		    <constructor-arg ref="notificationStore.httpAccessTransport"/>
+		</bean>
+		
+		<!-- Notification Store Service impl -->
+		<bean id="notificationStore.notificationStoreService" class="fr.paris.lutece.plugins.notificationstore.v1.web.service.NotificationStoreService">
+		    <constructor-arg ref="notificationStore.restTransport.httpAccess"/>
+		</bean>
+       
+       <bean id="elasticdata-gru.demandTypeService" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService">
+		   <constructor-arg ref="notificationStore.notificationStoreService"/>
+	   </bean>
        
        <!-- External attributes providers --> 
        <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
