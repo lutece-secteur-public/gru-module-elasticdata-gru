@@ -110,7 +110,7 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
         // TODO load all in one database call
         for ( String strId : listIdDataObjects )
         {
-            listDataObject.add( new BaseDemandObject( _demandDAO.loadById( strId ) ) );
+            listDataObject.add( new BaseDemandObject( _demandDAO.loadByDemandId( strId ) ) );
         }
         return listDataObject;
     }
