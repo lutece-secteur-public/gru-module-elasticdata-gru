@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.plugins.identitystore.v2.web.rs.AuthorType;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AuthorType;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.RequestAuthor;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.IdentitySearchResponse;
@@ -56,7 +56,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class IdentitystoreProvider implements IDataSourceExternalAttributesProvider
 {
-    private static final String PROPERTY_APPLICATION_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
+    private static final String PROPERTY_CLIENT_CODE = AppPropertiesService.getProperty( "elasticdata-gru.identitystore.applicationCode" );
     private static final String PROPERTY_IDENTITY_ATTRIBUTES_CODE_KEY = "elasticdata-gru.identitystore.attributeCodeToIndex.";
 
     @Inject
@@ -90,7 +90,7 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 		{
 			try
 			{
-				IdentitySearchResponse response = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_CLIENT_CODE, requestAutor );
+				IdentitySearchResponse response = _identityService.getIdentityByConnectionId( strConnectionId, PROPERTY_CLIENT_CODE, getRequestAuthor( ) );
 
 				if ( !response.getIdentities().isEmpty( ) )
 				{
@@ -116,5 +116,20 @@ public class IdentitystoreProvider implements IDataSourceExternalAttributesProvi
 			}
 		}
 	}
-s
+
+
+    @Override
+    public void provideAttributes( DataObject arg0 )
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    private static RequestAuthor getRequestAuthor( )
+    {
+        RequestAuthor author = new RequestAuthor( );
+        author.setType( AuthorType.application );
+        author.setName( PROPERTY_CLIENT_CODE );
+        return author;
+    }
 }

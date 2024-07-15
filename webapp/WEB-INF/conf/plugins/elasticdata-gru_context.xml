@@ -30,7 +30,7 @@
 		    </property>
 		 </bean>
 		
-		<bean id="notificationStore.restTransport.httpAccess" class="fr.paris.lutece.plugins.notificationstore.v3.web.rs.service.NotificationStoreTransportRest">
+		<bean id="notificationStore.restTransport.httpAccess" class="fr.paris.lutece.plugins.notificationstore.v1.web.rs.service.NotificationStoreTransportRest">
 		    <constructor-arg ref="notificationStore.httpAccessTransport"/>
 		</bean>
 		
