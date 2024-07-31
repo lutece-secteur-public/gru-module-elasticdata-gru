@@ -42,28 +42,19 @@ import fr.paris.lutece.plugins.elasticdata.service.DataSourceIncrementalService;
 import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandDAO;
 import fr.paris.lutece.plugins.grubusiness.business.demand.IDemandListener;
+import fr.paris.lutece.plugins.notificationstore.business.DemandHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * DemandDataSource
  */
 public class DemandDataSource extends AbstractDataSource implements IDemandListener
 {
-    IDemandDAO _demandDAO;
-
-    /**
-     * Set the IDemandDAO to use
-     * 
-     * @param demandDAO
-     */
-    public void setDemandDAO( IDemandDAO demandDAO )
-    {
-        _demandDAO = demandDAO;
-    }
-
+   
     /**
      * {@inheritDoc}
      */
@@ -97,7 +88,10 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
     @Override
     public List<String> getIdDataObjects( )
     {
-        return _demandDAO.loadAllIds( );
+    	// * avoid returning all DB ids *
+        // return _demandDAO.loadAllIds( );
+ 
+    	return new ArrayList<String>();
     }
 
     /**
@@ -107,11 +101,12 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
     public List<DataObject> getDataObjects( List<String> listIdDataObjects )
     {
         List<DataObject> listDataObject = new ArrayList<>( );
-        // TODO load all in one database call
-        for ( String strId : listIdDataObjects )
-        {
-            listDataObject.add( new BaseDemandObject( _demandDAO.loadByDemandId( strId ) ) );
-        }
+        List<Integer> listIdAsInt = listIdDataObjects.stream( ).map(Integer::valueOf).collect(Collectors.toList());
+        
+        List<Demand> demandList = DemandHome.getByIds( listIdAsInt );
+        
+        demandList.stream( ).forEach( d -> listDataObject.add( new BaseDemandObject( d ) ) );
+
         return listDataObject;
     }
 

@@ -34,38 +34,15 @@
 
 package fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms;
 
-import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
-import fr.paris.lutece.plugins.elasticdata.business.DataObject;
-import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
-import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
-import fr.paris.lutece.plugins.grubusiness.business.notification.EnumNotificationType;
-import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
-import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
-import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
-import fr.paris.lutece.plugins.libraryelastic.util.ElasticClientException;
-import fr.paris.lutece.portal.service.util.AppLogService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * DemandDataSource
  */
-public class SmsDataSource extends AbstractDataSource implements INotificationListener
+public class SmsDataSource extends NotificationDataSource
 {
-    INotificationDAO _notificationDAO;
 
-    /**
-     * Set the INotificationDAO to use
-     *
-     * @param notificationDAO
-     */
-    public void setNotificationDAO( INotificationDAO notificationDAO )
-    {
-        _notificationDAO = notificationDAO;
-    }
 
     /**
      * {@inheritDoc}
@@ -73,73 +50,13 @@ public class SmsDataSource extends AbstractDataSource implements INotificationLi
     @Override
     public void onCreateNotification( Notification notification )
     {
+    	// add filter
         if ( notification == null || notification.getSmsNotification( ) == null )
         {
             return;
         }
-        BaseDemandObject notificationObj = new BaseDemandObject( notification );
-        try
-        {
-            DataSourceService.processIncrementalIndexing( this, notificationObj );
-        }
-        catch( ElasticClientException e )
-        {
-            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for notification [" + notification.getId( ) + "]", e );
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onUpdateNotification( Notification notification )
-    {
-        AppLogService.info( "SmsDataSource doesn't manage onUpdateNotification method" );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onDeleteDemand( String strDemandId, String strDemandTypeId )
-    {
-        AppLogService.info( "SmsDataSource doesn't manage onDeleteDemand method" );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getIdDataObjects( )
-    {
-        NotificationFilter filter = new NotificationFilter( );
-        if ( !filter.containsSmsNotificationType( ) )
-        {
-        	filter.getListNotificationType( ).add( EnumNotificationType.SMS );
-        }
-
-
-        // TODO : replace this deprecated method
-        //filter.setHasSmsNotification( true );
-        List<Integer> listIds = new ArrayList<>( );  // = _notificationDAO.loadIdsByFilter( filter );
-
-        return listIds.stream().map(Object::toString)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<DataObject> getDataObjects( List<String> listIdDataObjects )
-    {
-        List<DataObject> listDataObject = new ArrayList<>( );
-        // TODO load all in one database call
-        for ( String strId : listIdDataObjects )
-        {
-            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( Integer.parseInt( strId ) ).get( ) ) );
-        }
-        return listDataObject;
+       
+        super.onCreateNotification( notification );
     }
 
 }

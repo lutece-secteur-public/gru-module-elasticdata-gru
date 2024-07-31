@@ -4,81 +4,30 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
 
-    
-        <!-- ######################  DAO Configuration  ############### -->
-        <!-- Beans "elasticdata-gru.demandDAO" and "elasticdata-gru.notificationDAO" can be overridden with one of the following configuration -->
-        
-        <!-- Mock DAO configuration -->
-        
-            <!-- bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockDemandDAO" />
-            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grubusiness.business.mock.MockNotificationDAO" / -->
-
-        <!-- GruSupply DAO configuration -->
-            <!--
-            <alias name="grusupply.demandDAO" alias="elasticdata-gru.demandDAO" />
-            <alias name="grusupply.notificationDAO" alias="elasticdata-gru.notificationDAO" />
-            -->    
-        <!-- GruStorageDB DAO Configuration -->    
-            <bean id="elasticdata-gru.demandDAO" class="fr.paris.lutece.plugins.grustoragedb.business.DemandDAO" />
-            <bean id="elasticdata-gru.notificationDAO" class="fr.paris.lutece.plugins.grustoragedb.business.NotificationDAO" />
-        <!-- ######################  End of DAO Configuration  ############### -->
        
-       <!-- IHttpTransportProvider declarations -->
-		<bean id="notificationStore.httpAccessTransport" class="fr.paris.lutece.plugins.notificationstore.v1.web.rs.service.HttpAccessTransport" >
-			    <property name="ApiEndPointUrl">
-		        <value>${elasticdata-gru.notificationStore.ApiEndPointUrl}</value>
-		    </property>
-		 </bean>
-		
-		<bean id="notificationStore.restTransport.httpAccess" class="fr.paris.lutece.plugins.notificationstore.v1.web.rs.service.NotificationStoreTransportRest">
-		    <constructor-arg ref="notificationStore.httpAccessTransport"/>
-		</bean>
-		
-		<!-- Notification Store Service impl -->
-		<bean id="notificationStore.notificationStoreService" class="fr.paris.lutece.plugins.notificationstore.v1.web.service.NotificationStoreService">
-		    <constructor-arg ref="notificationStore.restTransport.httpAccess"/>
-		</bean>
-       
-       <bean id="elasticdata-gru.demandTypeService" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeService">
-		   <constructor-arg ref="notificationStore.notificationStoreService"/>
-	   </bean>
-       
-       <!-- External attributes providers --> 
-       <bean id="elasticdata-gru.demandTypeExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.DemandTypeProvider" />
-       <bean id="elasticdata-gru.identitystoreExternalProvider" class="fr.paris.lutece.plugins.elasticdata.modules.gru.service.demand.IdentitystoreProvider" />
 
        <bean id="elasticdata-gru.demandDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.demand.DemandDataSource" >
            <property name="id" value="DemandDataSource" />
            <property name="name" value="Base des demandes de la GRU" />
            <property name="targetIndexName" value="demands" />
-           <property name="demandDAO" ref="elasticdata-gru.demandDAO" />
-           <property name="externalAttributesProvider">
-    		<list value-type="fr.paris.lutece.plugins.elasticdata.business.IDataSourceExternalAttributesProvider">
-    			<ref bean="elasticdata-gru.demandTypeExternalProvider"/>
-    			<ref bean="elasticdata-gru.identitystoreExternalProvider"/>
-    		</list>
-            </property>
        </bean>
 
        <bean id="elasticdata-gru.notificationDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource" >
            <property name="id" value="NotificationDataSource" />
            <property name="name" value="Base des notifications de la GRU" />
            <property name="targetIndexName" value="notifications" />
-           <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
        
        <bean id="elasticdata-gru.emailDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.email.EmailDataSource" >
            <property name="id" value="EmailDataSource" />
            <property name="name" value="Base des emails envoyés dans la cadre de la GRU" />
            <property name="targetIndexName" value="emails" />
-           <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
 
        <bean id="elasticdata-gru.smsDataSource" class="fr.paris.lutece.plugins.elasticdata.modules.gru.business.sms.SmsDataSource" >
            <property name="id" value="SMSDataSource" />
            <property name="name" value="Base des SMS envoyés dans la cadre de la GRU" />
            <property name="targetIndexName" value="sms" />
-           <property name="notificationDAO" ref="elasticdata-gru.notificationDAO" />
        </bean>
        
 </beans>

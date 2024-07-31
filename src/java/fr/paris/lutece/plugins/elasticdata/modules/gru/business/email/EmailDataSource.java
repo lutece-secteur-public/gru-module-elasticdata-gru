@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import fr.paris.lutece.plugins.elasticdata.business.AbstractDataSource;
 import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
+import fr.paris.lutece.plugins.elasticdata.modules.gru.business.notification.NotificationDataSource;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceService;
 import fr.paris.lutece.plugins.grubusiness.business.notification.EnumNotificationType;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
@@ -53,19 +54,9 @@ import java.util.stream.Collectors;
 /**
  * EmailDataSource
  */
-public class EmailDataSource extends AbstractDataSource implements INotificationListener
+public class EmailDataSource extends NotificationDataSource 
 {
-    INotificationDAO _notificationDAO;
 
-    /**
-     * Set the INotificationDAO to use
-     *
-     * @param notificationDAO
-     */
-    public void setNotificationDAO( INotificationDAO notificationDAO )
-    {
-        _notificationDAO = notificationDAO;
-    }
 
     /**
      * {@inheritDoc}
@@ -73,73 +64,14 @@ public class EmailDataSource extends AbstractDataSource implements INotification
     @Override
     public void onCreateNotification( Notification notification )
     {
+    	// filter
         if ( notification == null || notification.getEmailNotification( ) == null )
         {
             return;
         }
-        BaseDemandObject notificationObj = new BaseDemandObject( notification );
-        try
-        {
-            DataSourceService.processIncrementalIndexing( this, notificationObj );
-        }
-        catch( ElasticClientException e )
-        {
-            AppLogService.error( "ElasticClientException occurs while DataSourceService.insertData for notification [" + notification.getId( ) + "]", e );
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onUpdateNotification( Notification notification )
-    {
-        AppLogService.info( "EmailDataSource doesn't manage onUpdateNotification method" );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onDeleteDemand( String strDemandId, String strDemandTypeId )
-    {
-        AppLogService.info( "EmailDataSource doesn't manage onDeleteDemand method" );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getIdDataObjects( )
-    {
-        NotificationFilter filter = new NotificationFilter( );
-        if ( !filter.containsCustomerEmailNotificationType( ) )
-        {
-        	filter.getListNotificationType( ).add( EnumNotificationType.CUSTOMER_EMAIL );
-        }
-
-
-        // TODO : replace this deprecated method
-        // filter.setHasCustomerEmailNotification( true );
-        List<Integer> listIds = new ArrayList<>(); // _notificationDAO.loadIdsByFilter( filter );
-
-        return listIds.stream().map(Object::toString)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<DataObject> getDataObjects( List<String> listIdDataObjects )
-    {
-        List<DataObject> listDataObject = new ArrayList<>( );
-        // TODO load all in one database call
-        for ( String strId : listIdDataObjects )
-        {
-            listDataObject.add( new BaseDemandObject( _notificationDAO.loadById( Integer.parseInt( strId ) ).get( ) ) );
-        }
-        return listDataObject;
+        
+        super.onCreateNotification( notification );
+        
     }
 
 }

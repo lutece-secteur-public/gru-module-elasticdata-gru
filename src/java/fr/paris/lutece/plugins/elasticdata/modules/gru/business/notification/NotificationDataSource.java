@@ -39,10 +39,13 @@ import fr.paris.lutece.plugins.elasticdata.business.DataObject;
 import fr.paris.lutece.plugins.elasticdata.business.IndexerAction;
 import fr.paris.lutece.plugins.elasticdata.modules.gru.business.BaseDemandObject;
 import fr.paris.lutece.plugins.elasticdata.service.DataSourceIncrementalService;
+import fr.paris.lutece.plugins.grubusiness.business.demand.Demand;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationDAO;
 import fr.paris.lutece.plugins.grubusiness.business.notification.INotificationListener;
 import fr.paris.lutece.plugins.grubusiness.business.notification.Notification;
 import fr.paris.lutece.plugins.grubusiness.business.notification.NotificationFilter;
+import fr.paris.lutece.plugins.notificationstore.business.DemandHome;
+import fr.paris.lutece.plugins.notificationstore.business.NotificationHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
@@ -55,17 +58,6 @@ import java.util.stream.Collectors;
  */
 public class NotificationDataSource extends AbstractDataSource implements INotificationListener
 {
-    INotificationDAO _notificationDAO;
-
-    /**
-     * Set the INotificationDAO to use
-     * 
-     * @param notificationDAO
-     */
-    public void setNotificationDAO( INotificationDAO notificationDAO )
-    {
-        _notificationDAO = notificationDAO;
-    }
 
     /**
      * {@inheritDoc}
@@ -87,7 +79,7 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
     @Override
     public void onUpdateNotification( Notification notification )
     {
-        AppLogService.info( "NotificationDataSource doesn't manage onUpdateNotification method" );
+        AppLogService.info( this.getClass().getName() + " doesn't manage onUpdateNotification method" );
     }
 
     /**
@@ -96,36 +88,31 @@ public class NotificationDataSource extends AbstractDataSource implements INotif
     @Override
     public void onDeleteDemand( String strDemandId, String strDemandTypeId )
     {
-        AppLogService.info( "NotificationDataSource doesn't manage onDeleteDemand method" );
+        AppLogService.info( this.getClass().getName() + " doesn't manage onDeleteDemand method" );
     }
 
     @Override
     public List<String> getIdDataObjects( )
     {
-        NotificationFilter filter = new NotificationFilter( );
-
+        
+    	/* * avoid returning all DB ids *
+    	NotificationFilter filter = new NotificationFilter( );
         List<Integer> listIds = _notificationDAO.loadIdsByFilter( filter );
-
-        return listIds.stream( ).map( Object::toString ).collect( Collectors.toList( ) );
+        return listIds.stream( ).map( Object::toString ).collect( Collectors.toList( ) ); */
+    	
+    	return new ArrayList<String>();
     }
 
     @Override
     public List<DataObject> getDataObjects( List<String> listIdDataObjects )
     {
         List<DataObject> listDataObject = new ArrayList<>( );
+        List<Integer> listIdAsInt = listIdDataObjects.stream( ).map(Integer::valueOf).collect(Collectors.toList());
+        
+        List<Notification> notifList = NotificationHome.getByIds( listIdAsInt );
+        
+        notifList.stream( ).forEach( d -> listDataObject.add( new BaseDemandObject( d ) ) );
 
-        for ( String strId : listIdDataObjects )
-        {
-            Optional<Notification> notif = _notificationDAO.loadById( Integer.parseInt( strId ) );
-            if ( notif.isPresent( ) )
-            {
-                listDataObject.add( new BaseDemandObject( notif.get( ) ) );
-            }
-            else
-            {
-                AppLogService.error( "Error in indexing process : notification empty for id {}", strId );
-            }
-        }
         return listDataObject;
     }
 }
