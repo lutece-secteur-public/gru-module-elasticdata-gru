@@ -61,7 +61,7 @@ public class DemandDataSource extends AbstractDataSource implements IDemandListe
     @Override
     public void onCreateDemand( Demand demand )
     {
-        DataSourceIncrementalService.addTask( this.getId( ), String.valueOf( demand.getDemandId( ) ), IndexerAction.TASK_CREATE );
+        DataSourceIncrementalService.addTask( this.getId( ), String.valueOf( demand.getId( ) ), IndexerAction.TASK_CREATE );
     }
 
     /**
