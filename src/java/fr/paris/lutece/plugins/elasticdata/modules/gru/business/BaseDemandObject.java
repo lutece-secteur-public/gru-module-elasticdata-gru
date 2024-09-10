@@ -97,7 +97,7 @@ public class BaseDemandObject extends AbstractDataObject
         super( );
         if ( demand != null )
         {
-            setId( String.valueOf( demand.getDemandId( ) ) );
+            setId( String.valueOf( demand.getId( ) ) );
             _strDemandTypeId = demand.getTypeId( );
             _strDemandSubtypeId = demand.getSubtypeId( );
             _strConnectionId = demand.getCustomer( ).getId( );
